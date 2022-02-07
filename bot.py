@@ -40,13 +40,9 @@ def main():
     client = Client(api_key, api_secret)  
     status = client.get_system_status()
 
-    print('system status  (default = normal)   :',status['msg'].upper())
-    
-    print('*price test ETH-USDT*',client.get_avg_price(symbol='ETHUSDT'))
-
+    print('system status  (default = normal)\t:',status['msg'].upper())
+    print('price test ETH-USDT \t\t',client.get_avg_price(symbol='ETHUSDT'))
     #ticker = client.get_symbol_tickers(symbol=pair)
-
-    print('')
 
     # info_snapshot = client.get_account_snapshot(type='SPOT')
     # print('snapshot account ',info_snapshot)
@@ -62,9 +58,9 @@ def main():
     investimento = 15
     leverage = 1
     minimo_guadagno_assoluto = 1
-    minimo_guadagno_percentuale = 0.05 # in %
+    minimo_guadagno_percentuale = 0.02 # in %
 
-    my_symbols = ['DAR']    #my_symbols = client.get_all_tickers()  
+    my_symbols = ['ETH']    #my_symbols = client.get_all_tickers()   
 
     for i in my_symbols:
         usdtheter,usdbinance = prendi_i_prezzi(cliente=client,symbol1=i+'USDT',symbol2=i+'BUSD')
@@ -72,9 +68,8 @@ def main():
         guadagno_assoluto, guadagno_percentuale = calcola_guadagno(price_usdt=usdtheter,price_busd=usdbinance,
                                                     capitale=investimento,leva=leverage)
 
-        print()
         print('-'*80+'\nsimbolo: ',i)
-        print('\nprezzo in Theter (USDT) \t: ',usdtheter['price'],'\nprezzo in binance USD (BUSD) \t: ',usdbinance['price'])
+        print('\nprezzo in Theter \tUSDT) \t: ',usdtheter['price'],'\nprezzo in binance USD\tBUSD \t: ',usdbinance['price'])
         print('\nguadagno assoluto\t: ',round(guadagno_assoluto,5),'$')
         print('guadagno percentuale\t: ',round(guadagno_percentuale,7),'%\n')
 
@@ -82,8 +77,9 @@ def main():
         usdt_info = client.get_symbol_info(i+'BUSD')
         busd_min_quantity = busd_info['filters'][2]['minQty']
         usdt_min_quantity = usdt_info['filters'][2]['minQty']
+        
         print('QUANTITA MINIME ', busd_min_quantity,usdt_min_quantity)
-        print(type(usdt_min_quantity))
+
         if guadagno_percentuale >= minimo_guadagno_percentuale:
             print('\n**** APRO OPERAZIONE ****\n')
 
