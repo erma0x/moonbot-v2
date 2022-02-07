@@ -7,6 +7,7 @@ export binance_secret="your_api_secret_here"
 """
 from http import client
 import os
+from unicodedata import decimal
 import urllib 
 import http
 import requests
@@ -55,7 +56,7 @@ def main():
     investimento = 15
     leverage = 1
     minimo_guadagno_assoluto = 1
-    minimo_guadagno_percentuale = 0.07 # in %
+    minimo_guadagno_percentuale = 0.05 # in %
 
     my_symbols = ['DAR','BTC','ETH']    #my_symbols = client.get_all_tickers()  
 
@@ -69,12 +70,13 @@ def main():
         print('-'*80+'\nsimbolo: ',i)
         print('\nprezzo in Theter (USDT) \t: ',usdtheter['price'],'\nprezzo in binance USD (BUSD) \t: ',usdbinance['price'])
         print('\nguadagno assoluto\t: ',round(guadagno_assoluto,5),'$')
-        print('guadagno percentuale\t:',round(guadagno_percentuale,7),'%\n')
+        print('guadagno percentuale\t: ',round(guadagno_percentuale,7),'%\n')
 
         busd_info = client.get_symbol_info(i+'USDT')
         usdt_info = client.get_symbol_info(i+'BUSD')
         busd_min_quantity = busd_info['filters'][2]['minQty']
         usdt_min_quantity = usdt_info['filters'][2]['minQty']
+
         if guadagno_percentuale >= minimo_guadagno_percentuale:
             print('\n**** ESEGUO OPERAZIONE ****\n')
 
@@ -82,14 +84,14 @@ def main():
                 coin_quantity = investimento/float(usdbinance['price'])
                 order = client.order_limit_buy(
                     symbol = i+'BUSD',
-                    quantity = busd_min_quantity,
+                    quantity = round(busd_min_quantity,decimal),
                     price = round(float(usdbinance['price']),2))
 
             if usdtheter['price'] < usdbinance['price']:
                 coin_quantity = investimento/float(usdtheter['price'])
                 order = client.order_limit_buy(
                     symbol=i+'USDT',
-                    quantity=usdt_min_quantity,
+                    quantity=round(usdt_min_quantity,decimal),
                     price=round(float(usdtheter['price']),2))
             
             if order:
