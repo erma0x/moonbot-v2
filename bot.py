@@ -15,9 +15,9 @@ import asyncio
 from binance.client import Client
 from binance.enums import *
 
-def prendi_i_prezzi(symbol1,symbol2):
-    price_usdt = client.get_avg_price(symbol=symbol1) #
-    price_busd = client.get_avg_price(symbol=symbol2) #
+def prendi_i_prezzi(cliente,symbol1,symbol2):
+    price_usdt = cliente.get_avg_price(symbol=symbol1) #
+    price_busd = cliente.get_avg_price(symbol=symbol2) #
     return(price_usdt,price_busd)
 
 
@@ -58,7 +58,7 @@ def main():
     my_symbols = ['DAR','BTC','ETH']    #my_symbols = client.get_all_tickers()  
 
     for i in my_symbols:
-        usdtheter,usdbinance = prendi_i_prezzi(i+'USDT',i+'BUSD')
+        usdtheter,usdbinance = prendi_i_prezzi(cliente=client,symbol1=i+'USDT',symbol2=i+'BUSD')
 
         gain_abs, gain_prc = calcola_guadagno(price_usdt=usdtheter,price_busd=usdbinance,
                                                     capitale=investimento,leva=leverage)
