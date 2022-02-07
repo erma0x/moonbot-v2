@@ -47,10 +47,10 @@ def main():
     # info_account = client.get_account()
     # print('INFO account ',info_account)
 
-    USDT_balance = client.get_asset_balance(asset='USDT')['free']
-    BUSD_balance = client.get_asset_balance(asset='BUSD')['free']
+    USDT_balance = client.get_asset_balance(asset='USDT')
+    BUSD_balance = client.get_asset_balance(asset='BUSD')
 
-    print('USDT balance : ',USDT_balance,'\nBUSD balance : ',BUSD_balance)
+    print('USDT balance : ',USDT_balance['free'],'\nBUSD balance : ',BUSD_balance['free'])
     
     investimento = 15
     leverage = 1
