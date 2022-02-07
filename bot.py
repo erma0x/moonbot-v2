@@ -15,7 +15,6 @@ import asyncio
 from binance.client import Client
 from binance.enums import *
 
-
 def prendi_i_prezzi(symbol1,symbol2):
     price_usdt = client.get_avg_price(symbol=symbol1) #
     price_busd = client.get_avg_price(symbol=symbol2) #
@@ -39,19 +38,19 @@ def main():
     print('CLIENT PING ',client.ping())
 
     status = client.get_system_status()
-    print('SYSTEM STATUS ',status)
+    print('SYSTEM STATUS default normal  : ',status['msg'])
     
-    info_snapshot = client.get_account_snapshot(type='SPOT')
-    print('SNAPSHOT account ',info_snapshot)
+    # info_snapshot = client.get_account_snapshot(type='SPOT')
+    # print('SNAPSHOT account ',info_snapshot)
 
-    info_account = client.get_account()
-    print('INFO account ',info_account)
+    # info_account = client.get_account()
+    # print('INFO account ',info_account)
 
-    balanceBUSD = client.get_asset_balance(asset='BUSD')  
-    balanceUSDT = client.get_asset_balance(asset='USDT')
-    print('\nYOUR BALANCE IS -> ',balanceBUSD+balanceUSDT)
-    print('BUSD : ',balanceBUSD)
-    print('USDT : ',balanceUSDT)
+    # balanceBUSD = client.get_asset_balance(asset='BUSD')  
+    # balanceUSDT = client.get_asset_balance(asset='USDT')
+    # print('\nYOUR BALANCE IS -> ',balanceBUSD+balanceUSDT)
+    # print('BUSD : ',balanceBUSD)
+    # print('USDT : ',balanceUSDT)
 
     investimento = 20
     leverage = 1
@@ -74,19 +73,19 @@ def main():
         if gain_prc >= guadagno_minimo_percentuale:
             print('\n**** ESEGUO OPERAZIONE ****\n')
 
-            if usdtheter['price'] > usdbinance['price']:
-                coin_quantity = investimento/usdbinance['price']
-                order = client.order_limit_buy(
-                    symbol = i+'BUSD',
-                    quantity = coin_quantity,
-                    price = usdbinance['price'])
+            # if usdtheter['price'] > usdbinance['price']:
+            #     coin_quantity = investimento/usdbinance['price']
+            #     order = client.order_limit_buy(
+            #         symbol = i+'BUSD',
+            #         quantity = coin_quantity,
+            #         price = usdbinance['price'])
 
-            if usdtheter['price'] < usdbinance['price']:
-                coin_quantity = investimento/usdtheter['price']
-                order = client.order_limit_buy(
-                    symbol=i+'USDT',
-                    quantity=coin_quantity,
-                    price=usdtheter['price'])
+            # if usdtheter['price'] < usdbinance['price']:
+            #     coin_quantity = investimento/usdtheter['price']
+            #     order = client.order_limit_buy(
+            #         symbol=i+'USDT',
+            #         quantity=coin_quantity,
+            #         price=usdtheter['price'])
 
 if __name__ == "__main__":   
     main()
