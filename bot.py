@@ -65,8 +65,8 @@ def main():
         guadagno_assoluto, guadagno_percentuale = calcola_guadagno(price_usdt=usdtheter,price_busd=usdbinance,
                                                     capitale=investimento,leva=leverage)
 
-        print('-'*80)
-        print('simbolo: ',i)
+        print()
+        print('-'*80+'\nsimbolo: ',i)
         print('\nprezzo in Theter (USDT) \t: ',usdtheter['price'],'\nprezzo in binance USD (BUSD) \t: ',usdbinance['price'])
         print('\nguadagno assoluto\t: ',round(guadagno_assoluto,5),'$')
         print('guadagno percentuale\t:',round(guadagno_percentuale,7),'%\n')
@@ -75,23 +75,25 @@ def main():
         usdt_info = client.get_symbol_info(i+'BUSD')
         busd_min_quantity = busd_info['filters'][2]['minQty']
         usdt_min_quantity = usdt_info['filters'][2]['minQty']
-        #print('*************',busd_min_quantity,usdt_min_quantity)
         if guadagno_percentuale >= minimo_guadagno_percentuale:
             print('\n**** ESEGUO OPERAZIONE ****\n')
 
-        #     if usdtheter['price'] > usdbinance['price']:
-        #         coin_quantity = investimento/float(usdbinance['price'])
-        #         order = client.order_limit_buy(
-        #             symbol = i+'BUSD',
-        #             quantity = busd_min_quantity,
-        #             price = round(float(usdbinance['price']),2))
+            if usdtheter['price'] > usdbinance['price']:
+                coin_quantity = investimento/float(usdbinance['price'])
+                order = client.order_limit_buy(
+                    symbol = i+'BUSD',
+                    quantity = busd_min_quantity,
+                    price = round(float(usdbinance['price']),2))
 
-        #     if usdtheter['price'] < usdbinance['price']:
-        #         coin_quantity = investimento/float(usdtheter['price'])
-        #         order = client.order_limit_buy(
-        #             symbol=i+'USDT',
-        #             quantity=usdt_min_quantity,
-        #             price=round(float(usdtheter['price']),2))
+            if usdtheter['price'] < usdbinance['price']:
+                coin_quantity = investimento/float(usdtheter['price'])
+                order = client.order_limit_buy(
+                    symbol=i+'USDT',
+                    quantity=usdt_min_quantity,
+                    price=round(float(usdtheter['price']),2))
+            
+            if order:
+                print(order)
 
 if __name__ == "__main__":   
     main()
