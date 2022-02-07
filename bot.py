@@ -34,21 +34,21 @@ def main():
     api_secret = os.environ.get('binance_secret')
     client = Client(api_key, api_secret)  
     status = client.get_system_status()
-    print('SYSTEM STATUS default normal  : ',status['msg'])
-    price_usdt = client.get_avg_price(symbol='ETHUSDT')
-    print('***************',price_usdt)
+    print('system status  (default = normal)   :',status['msg'].upper())
+    price_test = client.get_avg_price(symbol='ETHUSDT')
+    print('*price test*',price_test)
     info_snapshot = client.get_account_snapshot(type='SPOT')
-    print('SNAPSHOT account ',info_snapshot)
+    print('snapshot account ',info_snapshot)
 
     info_account = client.get_account()
     print('INFO account ',info_account)
 
-    balanceBUSD = client.get_asset_balance(asset='BUSD')  
-    balanceUSDT = client.get_asset_balance(asset='USDT')
-    print('\nYOUR BALANCE IS -> ',balanceBUSD+balanceUSDT)
-    print('BUSD : ',balanceBUSD)
-    print('USDT : ',balanceUSDT)
-
+    asset_balance = client.get_asset_balance(asset='USDT')
+    for asset in asset_balance['balances']:
+        if asset['free']>5:
+            print('\n {0} balance is: {1} coins '.format(asset['asset'],asset['free']))
+    
+    
     investimento = 50
     leverage = 1
     minimo_guadagno_assoluto = 1
