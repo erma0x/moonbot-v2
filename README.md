@@ -17,8 +17,8 @@ python3 -m pip install --upgrade python-binance
 
 3. export api secrets in the shell eviroement 
 ```python 
-export binance_api="your_api_key_here"
-export binance_secret="your_api_secret_here"
+export binance_api="5DNRKSMR1oczdbTYxY5raUcdgjJAFnRuYtDYKcu9Wi6rcsNkKfKdOWSOKl9gToQ8"
+export binance_secret="O5OyFfTKWNzSXWSuHG5jw2SjwHRPp1LlZMViHBwvkIX6MfdSjQYJKD6dk6OHYCKo"
 ```
 
 ## How to run

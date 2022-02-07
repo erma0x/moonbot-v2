@@ -7,20 +7,22 @@ export binance_secret="your_api_secret_here"
 """
 from http import client
 import os
+import urllib 
+import http
+import requests
 import asyncio
+
 from binance.client import Client
 from binance.enums import *
 
 
-
-
 def prendi_i_prezzi(symbol1,symbol2):
-    price_usdt = client.get_avg_price(symbol=symbol1) 
-    price_busd = client.get_avg_price(symbol=symbol2)
+    price_usdt = client.get_avg_price(symbol=symbol1) #
+    price_busd = client.get_avg_price(symbol=symbol2) #
     return(price_usdt,price_busd)
 
 
-def calcola_guadagno(price_usdt,price_busd,capitale=1000,leva=1):
+def calcola_guadagno(price_usdt,price_busd,capitale=20,leva=1):
     a ,b =float(price_usdt['price']), float(price_busd['price'])
     differenza_percentuale = abs(a-b)/max(a,b)
     guadagno_assoluto = differenza_percentuale * capitale * leva 
@@ -45,48 +47,46 @@ def main():
     info_account = client.get_account()
     print('INFO account ',info_account)
 
-    balanceBUSD = client.get_asset_balance(asset='BUSD')
+    balanceBUSD = client.get_asset_balance(asset='BUSD')  
     balanceUSDT = client.get_asset_balance(asset='USDT')
     print('\nYOUR BALANCE IS -> ',balanceBUSD+balanceUSDT)
     print('BUSD : ',balanceBUSD)
     print('USDT : ',balanceUSDT)
 
-    investimento = 100
+    investimento = 20
     leverage = 1
-    guadagno_minimo_assoluto = 3
-    guadagno_minimo_percentuale = 0.07 # in %
+    guadagno_minimo_assoluto = 1
+    guadagno_minimo_percentuale = 0.007 # in %
     my_symbols = ['DAR','BTC','ETH']    #my_symbols = client.get_all_tickers()  
 
     for i in my_symbols:
         usdtheter,usdbinance = prendi_i_prezzi(i+'USDT',i+'BUSD')
+
         gain_abs, gain_prc = calcola_guadagno(price_usdt=usdtheter,price_busd=usdbinance,
                                                     capitale=investimento,leva=leverage)
-        
+
         print('-'*80)
         print('SIMBOLO ',i)
-        print('price USD Binance\n',usdtheter['price'],'price USD Theter',usdbinance)
+        print('price USD Theter\n',usdtheter['price'],'price USD Binance',usdbinance['price'])
         print('\nguadagno assoluto: ',round(gain_abs,4),'$')
         print('guadagno percentuale :',round(gain_prc,6),'%\n')
 
-        coin_quantity = investimento/usdtheter['price']
-
-        if gain_abs >= guadagno_minimo_assoluto:
+        if gain_prc >= guadagno_minimo_percentuale:
             print('\n**** ESEGUO OPERAZIONE ****\n')
 
             if usdtheter['price'] > usdbinance['price']:
+                coin_quantity = investimento/usdbinance['price']
                 order = client.order_limit_buy(
-                    symbol=i+'BUSD',
-                    quantity=coin_quantity,
-                    price=usdbinance['price'])
+                    symbol = i+'BUSD',
+                    quantity = coin_quantity,
+                    price = usdbinance['price'])
 
-            elif usdtheter['price'] < usdbinance['price']:
+            if usdtheter['price'] < usdbinance['price']:
+                coin_quantity = investimento/usdtheter['price']
                 order = client.order_limit_buy(
                     symbol=i+'USDT',
                     quantity=coin_quantity,
                     price=usdtheter['price'])
-
-            else:
-                pass
 
 if __name__ == "__main__":   
     main()
