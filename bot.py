@@ -12,6 +12,8 @@ from binance.client import Client
 from binance.enums import *
 
 
+
+
 def prendi_i_prezzi(symbol1,symbol2):
     price_usdt = client.get_avg_price(symbol=symbol1) 
     price_busd = client.get_avg_price(symbol=symbol2)
