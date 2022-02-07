@@ -85,20 +85,22 @@ def main():
         print('QUANTITA MINIME ', busd_min_quantity,usdt_min_quantity)
         print(type(usdt_min_quantity))
         if guadagno_percentuale >= minimo_guadagno_percentuale:
-            print('\n**** ESEGUO OPERAZIONE ****\n')
+            print('\n**** APRO OPERAZIONE ****\n')
 
             if usdtheter['price'] > usdbinance['price']:
+                print('eseguo operazione con BUSD')
                 coin_quantity = investimento/float(usdbinance['price'])
                 order = client.order_limit_buy(
                     symbol = i+'BUSD',
-                    quantity = busd_min_quantity,
+                    quantity = float(busd_min_quantity),
                     price = round(float(usdbinance['price']),2))
 
             if usdtheter['price'] < usdbinance['price']:
+                print('eseguo operazione con USDT')
                 coin_quantity = investimento/float(usdtheter['price'])
                 order = client.order_limit_buy(
                     symbol=i+'USDT',
-                    quantity=usdt_min_quantity,
+                    quantity=float(usdt_min_quantity),
                     price=round(float(usdtheter['price']),2))
             
             if order:
