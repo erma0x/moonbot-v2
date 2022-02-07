@@ -71,22 +71,28 @@ def main():
         print('\nguadagno assoluto: ',round(guadagno_assoluto,5),'$')
         print('guadagno percentuale :',round(guadagno_percentuale,7),'%\n')
 
-        if guadagno_percentuale >= minimo_guadagno_percentuale:
-            print('\n**** ESEGUO OPERAZIONE ****\n')
+        busd_info = client.get_symbol_info(i+'USDT')
+        usdt_info = client.get_symbol_info(i+'BUSD')
+        busd_min_quantity = busd_info['filters'][2]['minQty']
+        usdt_min_quantity = usdt_info['filters'][2]['minQty']
+        print('*************',busd_min_quantity,usdt_min_quantity)
 
-            if usdtheter['price'] > usdbinance['price']:
-                coin_quantity = investimento/float(usdbinance['price'])
-                order = client.order_limit_buy(
-                    symbol = i+'BUSD',
-                    quantity = round(coin_quantity,6),
-                    price = round(float(usdbinance['price']),2))
+        # if guadagno_percentuale >= minimo_guadagno_percentuale:
+        #     print('\n**** ESEGUO OPERAZIONE ****\n')
 
-            if usdtheter['price'] < usdbinance['price']:
-                coin_quantity = investimento/float(usdtheter['price'])
-                order = client.order_limit_buy(
-                    symbol=i+'USDT',
-                    quantity=round(coin_quantity,6),
-                    price=round(float(usdtheter['price']),2))
+        #     if usdtheter['price'] > usdbinance['price']:
+        #         coin_quantity = investimento/float(usdbinance['price'])
+        #         order = client.order_limit_buy(
+        #             symbol = i+'BUSD',
+        #             quantity = round(coin_quantity,6),
+        #             price = round(float(usdbinance['price']),2))
+
+        #     if usdtheter['price'] < usdbinance['price']:
+        #         coin_quantity = investimento/float(usdtheter['price'])
+        #         order = client.order_limit_buy(
+        #             symbol=i+'USDT',
+        #             quantity=round(coin_quantity,6),
+        #             price=round(float(usdtheter['price']),2))
 
 if __name__ == "__main__":   
     main()
