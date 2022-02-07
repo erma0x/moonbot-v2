@@ -28,33 +28,32 @@ def calcola_guadagno(price_usdt,price_busd,capitale=20,leva=1):
     guadagno_percentuale = guadagno_assoluto/capitale * 100
     return(guadagno_assoluto,guadagno_percentuale)
        
-
 def main():
     """puoi giocare sul guadagno minimo assoluto o percentuale"""
     api_key = os.environ.get('binance_api')
     api_secret = os.environ.get('binance_secret')
     client = Client(api_key, api_secret)  
-
     status = client.get_system_status()
     print('SYSTEM STATUS default normal  : ',status['msg'])
     price_usdt = client.get_avg_price(symbol='ETHUSDT')
     print('***************',price_usdt)
-    # info_snapshot = client.get_account_snapshot(type='SPOT')
-    # print('SNAPSHOT account ',info_snapshot)
+    info_snapshot = client.get_account_snapshot(type='SPOT')
+    print('SNAPSHOT account ',info_snapshot)
 
-    # info_account = client.get_account()
-    # print('INFO account ',info_account)
+    info_account = client.get_account()
+    print('INFO account ',info_account)
 
-    # balanceBUSD = client.get_asset_balance(asset='BUSD')  
-    # balanceUSDT = client.get_asset_balance(asset='USDT')
-    # print('\nYOUR BALANCE IS -> ',balanceBUSD+balanceUSDT)
-    # print('BUSD : ',balanceBUSD)
-    # print('USDT : ',balanceUSDT)
+    balanceBUSD = client.get_asset_balance(asset='BUSD')  
+    balanceUSDT = client.get_asset_balance(asset='USDT')
+    print('\nYOUR BALANCE IS -> ',balanceBUSD+balanceUSDT)
+    print('BUSD : ',balanceBUSD)
+    print('USDT : ',balanceUSDT)
 
-    investimento = 500
+    investimento = 50
     leverage = 1
     minimo_guadagno_assoluto = 1
     minimo_guadagno_percentuale = 0.07 # in %
+
     my_symbols = ['DAR','BTC','ETH']    #my_symbols = client.get_all_tickers()  
 
     for i in my_symbols:
