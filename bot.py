@@ -75,14 +75,14 @@ def main():
             print('\n**** ESEGUO OPERAZIONE ****\n')
 
             if usdtheter['price'] > usdbinance['price']:
-                coin_quantity = investimento/usdbinance['price']
+                coin_quantity = investimento/float(usdbinance['price'])
                 order = client.order_limit_buy(
                     symbol = i+'BUSD',
                     quantity = coin_quantity,
                     price = usdbinance['price'])
 
             if usdtheter['price'] < usdbinance['price']:
-                coin_quantity = investimento/usdtheter['price']
+                coin_quantity = investimento/float(usdtheter['price'])
                 order = client.order_limit_buy(
                     symbol=i+'USDT',
                     quantity=coin_quantity,
