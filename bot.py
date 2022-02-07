@@ -69,7 +69,7 @@ def main():
                                                     capitale=investimento,leva=leverage)
 
         print('-'*80+'\nsimbolo: ',i)
-        print('\nprezzo in Theter \tUSDT) \t: ',usdtheter['price'],'\nprezzo in binance USD\tBUSD \t: ',usdbinance['price'])
+        print('\nprezzo in Theter \tUSDT \t: ',usdtheter['price'],'\nprezzo in binance USD\tBUSD \t: ',usdbinance['price'])
         print('\nguadagno assoluto\t: ',round(guadagno_assoluto,5),'$')
         print('guadagno percentuale\t: ',round(guadagno_percentuale,7),'%\n')
 
@@ -80,7 +80,7 @@ def main():
         
         print('QUANTITA MINIME ', busd_min_quantity,usdt_min_quantity)
 
-        if guadagno_percentuale >= minimo_guadagno_percentuale:
+        if float(guadagno_percentuale) >= minimo_guadagno_percentuale:
             print('\n**** APRO OPERAZIONE ****\n')
 
             if usdtheter['price'] > usdbinance['price']:
