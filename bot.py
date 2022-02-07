@@ -92,7 +92,7 @@ def main():
                 coin_quantity = investimento/float(usdbinance['price'])
                 order = client.order_limit_buy(
                     symbol = i+'BUSD',
-                    quantity = float(busd_min_quantity),
+                    quantity = busd_min_quantity,
                     price = round(float(usdbinance['price']),2))
 
             if usdtheter['price'] < usdbinance['price']:
@@ -100,7 +100,7 @@ def main():
                 coin_quantity = investimento/float(usdtheter['price'])
                 order = client.order_limit_buy(
                     symbol=i+'USDT',
-                    quantity=float(usdt_min_quantity),
+                    quantity=usdt_min_quantity,
                     price=round(float(usdtheter['price']),2))
             
             if order:
