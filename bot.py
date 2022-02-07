@@ -47,8 +47,10 @@ def main():
     # info_account = client.get_account()
     # print('INFO account ',info_account)
 
-    asset_balance = client.get_asset_balance(asset='USDT')
-    print(asset_balance)
+    USDT_balance = client.get_asset_balance(asset='USDT')['free']
+    BUSD_balance = client.get_asset_balance(asset='BUSD')['free']
+
+    print(USDT_balance,BUSD_balance)
     # for asset in asset_balance['balances']:
     #     if asset['free']>5:
     #         print('\n {0} balance is: {1} coins '.format(asset['asset'],asset['free']))
