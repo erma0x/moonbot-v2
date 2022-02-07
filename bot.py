@@ -64,7 +64,7 @@ def main():
     minimo_guadagno_assoluto = 1
     minimo_guadagno_percentuale = 0.05 # in %
 
-    my_symbols = ['DAR','BTC','ETH']    #my_symbols = client.get_all_tickers()  
+    my_symbols = ['DAR']    #my_symbols = client.get_all_tickers()  
 
     for i in my_symbols:
         usdtheter,usdbinance = prendi_i_prezzi(cliente=client,symbol1=i+'USDT',symbol2=i+'BUSD')
@@ -92,7 +92,7 @@ def main():
                 coin_quantity = investimento/float(usdbinance['price'])
                 order = client.order_limit_buy(
                     symbol = i+'BUSD',
-                    quantity = busd_min_quantity,
+                    quantity = 2,
                     price = round(float(usdbinance['price']),2))
 
             if usdtheter['price'] < usdbinance['price']:
@@ -100,7 +100,7 @@ def main():
                 coin_quantity = investimento/float(usdtheter['price'])
                 order = client.order_limit_buy(
                     symbol=i+'USDT',
-                    quantity=usdt_min_quantity,
+                    quantity= 2,
                     price=round(float(usdtheter['price']),2))
             
             if order:
