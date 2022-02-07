@@ -28,7 +28,9 @@ def calcola_guadagno(price_usdt,price_busd,capitale=15,leva=1):
     guadagno_assoluto = differenza_percentuale * capitale * leva 
     guadagno_percentuale = guadagno_assoluto/capitale * 100
     return(guadagno_assoluto,guadagno_percentuale)
-       
+
+
+
 def main():
     """puoi giocare sul guadagno minimo assoluto o percentuale"""
     
@@ -41,6 +43,10 @@ def main():
     print('system status  (default = normal)   :',status['msg'].upper())
     
     print('*price test ETH-USDT*',client.get_avg_price(symbol='ETHUSDT'))
+
+    #ticker = client.get_symbol_tickers(symbol=pair)
+
+    print('')
 
     # info_snapshot = client.get_account_snapshot(type='SPOT')
     # print('snapshot account ',info_snapshot)
@@ -76,7 +82,8 @@ def main():
         usdt_info = client.get_symbol_info(i+'BUSD')
         busd_min_quantity = busd_info['filters'][2]['minQty']
         usdt_min_quantity = usdt_info['filters'][2]['minQty']
-
+        print('QUANTITA MINIME ', busd_min_quantity,usdt_min_quantity)
+        print(type(usdt_min_quantity))
         if guadagno_percentuale >= minimo_guadagno_percentuale:
             print('\n**** ESEGUO OPERAZIONE ****\n')
 
@@ -84,14 +91,14 @@ def main():
                 coin_quantity = investimento/float(usdbinance['price'])
                 order = client.order_limit_buy(
                     symbol = i+'BUSD',
-                    quantity = round(busd_min_quantity,decimal),
+                    quantity = busd_min_quantity,
                     price = round(float(usdbinance['price']),2))
 
             if usdtheter['price'] < usdbinance['price']:
                 coin_quantity = investimento/float(usdtheter['price'])
                 order = client.order_limit_buy(
                     symbol=i+'USDT',
-                    quantity=round(usdt_min_quantity,decimal),
+                    quantity=usdt_min_quantity,
                     price=round(float(usdtheter['price']),2))
             
             if order:
