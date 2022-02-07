@@ -69,9 +69,9 @@ def main():
                                                     capitale=investimento,leva=leverage)
 
         print('-'*80+'\nsimbolo: ',i)
-        print('\nprezzo in Theter \tUSDT \t: ',usdtheter['price'],'\nprezzo in binance USD\tBUSD \t: ',usdbinance['price'])
-        print('\nguadagno assoluto\t: ',round(guadagno_assoluto,5),'$')
-        print('guadagno percentuale\t: ',round(guadagno_percentuale,7),'%\n')
+        print('\nPREZZO in Theter \tUSDT \t: ',usdtheter['price'],'\nprezzo in binance USD\tBUSD \t: ',usdbinance['price'])
+        print('\nguadagno ASSOLUTO\t: ',round(guadagno_assoluto,5),'$')
+        print('\nguadagno PERCENTUALE\t: ',round(guadagno_percentuale,7),'%\n')
 
         busd_info = client.get_symbol_info(i+'USDT')
         usdt_info = client.get_symbol_info(i+'BUSD')
