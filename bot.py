@@ -34,12 +34,10 @@ def main():
     api_key = os.environ.get('binance_api')
     api_secret = os.environ.get('binance_secret')
 
-    client = Client(api_key, api_secret)
-    print('CLIENT PING ',client.ping())
-
     status = client.get_system_status()
     print('SYSTEM STATUS default normal  : ',status['msg'])
-    
+    price_usdt = client.get_avg_price(symbol='ETHUSDT')
+    print('***************',price_usdt)
     # info_snapshot = client.get_account_snapshot(type='SPOT')
     # print('SNAPSHOT account ',info_snapshot)
 
