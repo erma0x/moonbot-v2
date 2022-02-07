@@ -33,6 +33,7 @@ def main():
     """puoi giocare sul guadagno minimo assoluto o percentuale"""
     api_key = os.environ.get('binance_api')
     api_secret = os.environ.get('binance_secret')
+    client = Client(api_key, api_secret)  
 
     status = client.get_system_status()
     print('SYSTEM STATUS default normal  : ',status['msg'])
