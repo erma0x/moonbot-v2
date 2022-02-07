@@ -30,46 +30,51 @@ def calcola_guadagno(price_usdt,price_busd,capitale=20,leva=1):
        
 def main():
     """puoi giocare sul guadagno minimo assoluto o percentuale"""
+    
     api_key = os.environ.get('binance_api')
     api_secret = os.environ.get('binance_secret')
+    
     client = Client(api_key, api_secret)  
     status = client.get_system_status()
-    print('system status  (default = normal)   :',status['msg'].upper())
-    price_test = client.get_avg_price(symbol='ETHUSDT')
-    print('*price test*',price_test)
-    info_snapshot = client.get_account_snapshot(type='SPOT')
-    print('snapshot account ',info_snapshot)
 
-    info_account = client.get_account()
-    print('INFO account ',info_account)
+    print('system status  (default = normal)   :',status['msg'].upper())
+    
+    print('*price test*',client.get_avg_price(symbol='ETHUSDT'))
+
+    # info_snapshot = client.get_account_snapshot(type='SPOT')
+    # print('snapshot account ',info_snapshot)
+
+    # info_account = client.get_account()
+    # print('INFO account ',info_account)
 
     asset_balance = client.get_asset_balance(asset='USDT')
-    for asset in asset_balance['balances']:
-        if asset['free']>5:
-            print('\n {0} balance is: {1} coins '.format(asset['asset'],asset['free']))
+    # print(asset_balance)
+    # for asset in asset_balance['balances']:
+    #     if asset['free']>5:
+    #         print('\n {0} balance is: {1} coins '.format(asset['asset'],asset['free']))
     
     
-    investimento = 50
-    leverage = 1
-    minimo_guadagno_assoluto = 1
-    minimo_guadagno_percentuale = 0.07 # in %
+    # investimento = 50
+    # leverage = 1
+    # minimo_guadagno_assoluto = 1
+    # minimo_guadagno_percentuale = 0.07 # in %
 
-    my_symbols = ['DAR','BTC','ETH']    #my_symbols = client.get_all_tickers()  
+    # my_symbols = ['DAR','BTC','ETH']    #my_symbols = client.get_all_tickers()  
 
-    for i in my_symbols:
-        usdtheter,usdbinance = prendi_i_prezzi(cliente=client,symbol1=i+'USDT',symbol2=i+'BUSD')
+    # for i in my_symbols:
+    #     usdtheter,usdbinance = prendi_i_prezzi(cliente=client,symbol1=i+'USDT',symbol2=i+'BUSD')
 
-        guadagno_assoluto, guadagno_percentuale = calcola_guadagno(price_usdt=usdtheter,price_busd=usdbinance,
-                                                    capitale=investimento,leva=leverage)
+    #     guadagno_assoluto, guadagno_percentuale = calcola_guadagno(price_usdt=usdtheter,price_busd=usdbinance,
+    #                                                 capitale=investimento,leva=leverage)
 
-        print('-'*80)
-        print('simbolo: ',i)
-        print('\nprezzo in Theter (USDT) : ',usdtheter['price'],'\nprezzo in binance USD (BUSD) : ',usdbinance['price'])
-        print('\nguadagno assoluto: ',round(guadagno_assoluto,5),'$')
-        print('guadagno percentuale :',round(guadagno_percentuale,7),'%\n')
+    #     print('-'*80)
+    #     print('simbolo: ',i)
+    #     print('\nprezzo in Theter (USDT) : ',usdtheter['price'],'\nprezzo in binance USD (BUSD) : ',usdbinance['price'])
+    #     print('\nguadagno assoluto: ',round(guadagno_assoluto,5),'$')
+    #     print('guadagno percentuale :',round(guadagno_percentuale,7),'%\n')
 
-        if guadagno_percentuale >= minimo_guadagno_percentuale:
-            print('\n**** ESEGUO OPERAZIONE ****\n')
+    #     if guadagno_percentuale >= minimo_guadagno_percentuale:
+    #         print('\n**** ESEGUO OPERAZIONE ****\n')
 
             # if usdtheter['price'] > usdbinance['price']:
             #     coin_quantity = investimento/usdbinance['price']
