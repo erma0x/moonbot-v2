@@ -86,7 +86,7 @@ def main():
             if usdtheter['price'] > usdbinance['price']:
                 print('eseguo operazione con BUSD')
                 coin_quantity = investimento/float(usdbinance['price'])
-                order = client.order_limit_buy(
+                order = client.order_limit_buy(timeInForce='GTC',
                     symbol = i+'BUSD',
                     quantity = 0.0001,
                     price = round(float(usdbinance['price']),2))
@@ -94,7 +94,7 @@ def main():
             if usdtheter['price'] < usdbinance['price']:
                 print('eseguo operazione con USDT')
                 coin_quantity = investimento/float(usdtheter['price'])
-                order = client.order_limit_buy(
+                order = client.order_limit_buy(timeInForce='GTC',
                     symbol=i+'USDT',
                     quantity= 0.0001,
                     price=round(float(usdtheter['price']),2))
