@@ -105,6 +105,8 @@ def main():
         
         print('QUANTITA MINIME ', busd_min_quantity,usdt_min_quantity)
         numero_massimo_ordini = 2
+
+        #while True:
         for numero_ordine in range(numero_massimo_ordini):
             if float(guadagno_percentuale) >= minimo_guadagno_percentuale:
                 print('\n**** APRO OPERAZIONE ****\n')
@@ -127,8 +129,8 @@ def main():
                         price=round(float(usdtheter['price']),2))
 
                 open_orders.append(order)
-                time.sleep(10)
-
+        
+        time.sleep(10)
 
         for my_order in open_orders:
             if my_order['executedQty'] == my_order['origQty']: # SE GLI ORDINI SONO STATI FILLATI 
@@ -148,8 +150,10 @@ def main():
                         price=round(float(usdtheter['price']),2))
 
 
-if __name__ == "__main__":   
-    main()
+if __name__ == "__main__":
+    while True:   
+        main()
+        time.sleep(1)
 
 # async def main():
 #     api_key = os.environ.get('binance_api')
