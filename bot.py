@@ -68,9 +68,6 @@ def main():
     print('price test ETH-USDT \t\t',client.get_avg_price(symbol='ETHUSDT'))
     
     
-    ticker = client.get_symbol_tickers(symbol=pair)
-    print('MY TICKER')
-    
     # info_snapshot = client.get_account_snapshot(type='SPOT')
     # print('snapshot account ',info_snapshot)
 
