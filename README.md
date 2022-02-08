@@ -1,6 +1,9 @@
 # GreenRock Robota
 ### Trading arbitrage bot in the Binance exchange 
 
+## TO DO
+APIError(code=-1013): Filter failure: MIN_NOTIONAL
+
 
 ## Installation
 
