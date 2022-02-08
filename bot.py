@@ -147,7 +147,7 @@ def main():
                         order = client.order_limit_sell(timeInForce='GTC',
                             symbol=i+'USDT',
                             quantity = format_coin_quantity(coin_quantity),
-                            price=round(float(usdtheter['price']),2))`
+                            price=round(float(usdtheter['price']),2))
    
         if c==60:
             break
