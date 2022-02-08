@@ -127,9 +127,9 @@ def main():
                         price=round(float(usdtheter['price']),2))
 
                 open_orders.append(order)
-                    #'origQty': '0.00490000', 'executedQty': '0.00000000'
-        
-        time.sleep(1)
+                time.sleep(10)
+
+
         for my_order in open_orders:
             if my_order['executedQty'] == my_order['origQty']: # SE GLI ORDINI SONO STATI FILLATI 
 
