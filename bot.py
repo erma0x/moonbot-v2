@@ -68,92 +68,92 @@ def main():
     print('system status  (default = normal)\t:',status['msg'].upper())
     print('price test ETH-USDT \t\t',client.get_avg_price(symbol='ETHUSDT'))
     
-    
-    # info_snapshot = client.get_account_snapshot(type='SPOT')
-    # print('snapshot account ',info_snapshot)
 
-    # info_account = client.get_account()
-    # print('INFO account ',info_account)
-
-    USDT_balance = client.get_asset_balance(asset='USDT')
-    BUSD_balance = client.get_asset_balance(asset='BUSD')
-
-    print('USDT balance : ',USDT_balance['free'],'\nBUSD balance : ',BUSD_balance['free'])
-    
     investimento = 15
     leverage = 1
     minimo_guadagno_assoluto = 1
     minimo_guadagno_percentuale = 0.02 # in %
     open_orders = []
-    my_symbols = ['ETH']    #my_symbols = client.get_all_tickers()   
+    my_symbols = ['ETH']  
+    numero_massimo_ordini = 2
+    c=0
+    while True:   
+        # info_snapshot = client.get_account_snapshot(type='SPOT')
+        # print('snapshot account ',info_snapshot)
 
-    for i in my_symbols:
-        usdtheter,usdbinance = prendi_i_prezzi(cliente=client,symbol1=i+'USDT',symbol2=i+'BUSD')
+        # info_account = client.get_account()
+        # print('INFO account ',info_account)
 
-        guadagno_assoluto, guadagno_percentuale = calcola_guadagno(price_usdt=usdtheter,price_busd=usdbinance,
-                                                    capitale=investimento,leva=leverage)
+        USDT_balance = client.get_asset_balance(asset='USDT')
+        BUSD_balance = client.get_asset_balance(asset='BUSD')
 
-        print('-'*80+'\nsimbolo: ',i)
-        print('\nPREZZO in Theter \tUSDT \t: ',usdtheter['price'],'\nprezzo in binance USD\tBUSD \t: ',usdbinance['price'])
-        print('\nguadagno ASSOLUTO\t: ',round(guadagno_assoluto,5),'$')
-        print('\nguadagno PERCENTUALE\t: ',round(guadagno_percentuale,7),'%\n')
-
-        busd_info = client.get_symbol_info(i+'USDT')
-        usdt_info = client.get_symbol_info(i+'BUSD')
-        busd_min_quantity = busd_info['filters'][2]['minQty']
-        usdt_min_quantity = usdt_info['filters'][2]['minQty']
+        print('USDT balance : ',USDT_balance['free'],'\nBUSD balance : ',BUSD_balance['free'])
         
-        print('QUANTITA MINIME ', busd_min_quantity,usdt_min_quantity)
-        numero_massimo_ordini = 2
+        for i in my_symbols:
+            usdtheter,usdbinance = prendi_i_prezzi(cliente=client,symbol1=i+'USDT',symbol2=i+'BUSD')
 
-        #while True:
-        for numero_ordine in range(numero_massimo_ordini):
-            if float(guadagno_percentuale) >= minimo_guadagno_percentuale:
-                print('\n**** APRO OPERAZIONE ****\n')
+            guadagno_assoluto, guadagno_percentuale = calcola_guadagno(price_usdt=usdtheter,price_busd=usdbinance,
+                                                        capitale=investimento,leva=leverage)
 
-                if usdtheter['price'] > usdbinance['price']:
-                    print('eseguo operazione con BUSD')
-                    coin_quantity = investimento/float(usdbinance['price'])
-                    order = client.order_limit_buy(timeInForce='GTC',
-                        symbol = i+'BUSD',
-                        quantity = format_coin_quantity(coin_quantity),
-                        price = round(float(usdbinance['price']),2))
+            print('-'*80+'\nsimbolo: ',i)
+            print('\nPREZZO in Theter \tUSDT \t: ',usdtheter['price'],'\nprezzo in binance USD\tBUSD \t: ',usdbinance['price'])
+            print('\nguadagno ASSOLUTO\t: ',round(guadagno_assoluto,5),'$')
+            print('\nguadagno PERCENTUALE\t: ',round(guadagno_percentuale,7),'%\n')
 
+            busd_info = client.get_symbol_info(i+'USDT')
+            usdt_info = client.get_symbol_info(i+'BUSD')
+            busd_min_quantity = busd_info['filters'][2]['minQty']
+            usdt_min_quantity = usdt_info['filters'][2]['minQty']
+            
+            print('QUANTITA MINIME ', busd_min_quantity,usdt_min_quantity)
+            #while True:
+            for numero_ordine in range(numero_massimo_ordini):
+                if float(guadagno_percentuale) >= minimo_guadagno_percentuale:
+                    print('\n**** APRO OPERAZIONE ****\n')
 
-                if usdtheter['price'] < usdbinance['price']:
-                    print('eseguo operazione con USDT')
-                    coin_quantity = investimento/float(usdtheter['price'])
-                    order = client.order_limit_buy(timeInForce='GTC',
-                        symbol=i+'USDT',
-                        quantity = format_coin_quantity(coin_quantity),
-                        price=round(float(usdtheter['price']),2))
+                    if usdtheter['price'] > usdbinance['price']:
+                        print('eseguo operazione con BUSD')
+                        coin_quantity = investimento/float(usdbinance['price'])
+                        order = client.order_limit_buy(timeInForce='GTC',
+                            symbol = i+'BUSD',
+                            quantity = format_coin_quantity(coin_quantity),
+                            price = round(float(usdbinance['price']),2))
 
-                open_orders.append(order)
-        
-        time.sleep(10)
+                    if usdtheter['price'] < usdbinance['price']:
+                        print('eseguo operazione con USDT')
+                        coin_quantity = investimento/float(usdtheter['price'])
+                        order = client.order_limit_buy(timeInForce='GTC',
+                            symbol=i+'USDT',
+                            quantity = format_coin_quantity(coin_quantity),
+                            price=round(float(usdtheter['price']),2))
 
-        for my_order in open_orders:
-            if my_order['executedQty'] == my_order['origQty']: # SE GLI ORDINI SONO STATI FILLATI 
+                    open_orders.append(order)
+            
+            time.sleep(1)
+            c+=1
 
-                if 'USDT' in my_order['symbol'] :
-                    coin_quantity = investimento/float(usdtheter['price'])
-                    order = client.order_limit_sell(timeInForce='GTC',
-                        symbol=i+'BUSD',
-                        quantity = format_coin_quantity(coin_quantity),
-                        price=round(float(usdbinance['price']),2))
+            for my_order in open_orders:
+                if my_order['executedQty'] == my_order['origQty']: # SE GLI ORDINI SONO STATI FILLATI 
 
-                if 'BUSD' in my_order['symbol'] :
-                    coin_quantity = investimento/float(usdtheter['price'])
-                    order = client.order_limit_sell(timeInForce='GTC',
-                        symbol=i+'USDT',
-                        quantity = format_coin_quantity(coin_quantity),
-                        price=round(float(usdtheter['price']),2))
+                    if 'USDT' in my_order['symbol'] :
+                        coin_quantity = investimento/float(usdtheter['price'])
+                        order = client.order_limit_sell(timeInForce='GTC',
+                            symbol=i+'BUSD',
+                            quantity = format_coin_quantity(coin_quantity),
+                            price=round(float(usdbinance['price']),2))
 
+                    if 'BUSD' in my_order['symbol'] :
+                        coin_quantity = investimento/float(usdtheter['price'])
+                        order = client.order_limit_sell(timeInForce='GTC',
+                            symbol=i+'USDT',
+                            quantity = format_coin_quantity(coin_quantity),
+                            price=round(float(usdtheter['price']),2))`
+   
+        if c==60:
+            break
 
 if __name__ == "__main__":
-    while True:   
-        main()
-        time.sleep(1)
+    main()
 
 # async def main():
 #     api_key = os.environ.get('binance_api')
