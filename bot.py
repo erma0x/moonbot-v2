@@ -5,12 +5,14 @@ in the shell ...
 export binance_api="your_api_key_here"
 export binance_secret="your_api_secret_here"
 """
+from math import ceil, floor
+import requests, json
+
 from http import client
 import os
 from unicodedata import decimal
 import urllib 
 import http
-import requests
 import asyncio
 
 from binance.client import Client
