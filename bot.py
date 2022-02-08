@@ -30,6 +30,27 @@ def calcola_guadagno(price_usdt,price_busd,capitale=15,leva=1):
     return(guadagno_assoluto,guadagno_percentuale)
 
 
+def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',direction = floor):
+    URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
+    result = requests.get(URL).json()
+    print('RISULTATI ',result)
+
+    numbers_after_zero = result['symbols'][0]['filters'][2]['stepSize']
+    print('NUMERI DOPO LO ZERO ',numbers_after_zero)
+
+    zeros = 0
+    number = float(numbers_after_zero)
+    while number < 0.1:
+        number *= 10
+        zeros += 1
+    if float(numbers_after_zero) > 0.1:
+        places = zeros
+    else:
+        places = zeros + 1
+
+    return direction(initial_coin_quantity * (10**places)) / float(10**places)
+
+
 
 def main():
     """puoi giocare sul guadagno minimo assoluto o percentuale"""
@@ -88,7 +109,7 @@ def main():
                 coin_quantity = investimento/float(usdbinance['price'])
                 order = client.order_limit_buy(timeInForce='GTC',
                     symbol = i+'BUSD',
-                    quantity = '0.00011',
+                    quantity = format_coin_quantity(coin_quantity),
                     price = round(float(usdbinance['price']),2))
 
             if usdtheter['price'] < usdbinance['price']:
@@ -96,7 +117,7 @@ def main():
                 coin_quantity = investimento/float(usdtheter['price'])
                 order = client.order_limit_buy(timeInForce='GTC',
                     symbol=i+'USDT',
-                    quantity= '0.00011',
+                    quantity = format_coin_quantity(coin_quantity),
                     price=round(float(usdtheter['price']),2))
             
             if order:
