@@ -14,6 +14,7 @@ from unicodedata import decimal
 import urllib 
 import http
 import asyncio
+import time
 
 from binance.client import Client
 from binance.enums import *
