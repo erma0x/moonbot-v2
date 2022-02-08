@@ -72,7 +72,7 @@ def main():
     investimento = 15
     leverage = 1
     minimo_guadagno_assoluto = 1
-    minimo_guadagno_percentuale = 0.02 # in %
+    minimo_guadagno_percentuale = 0.002 # in %
     open_orders = []
     my_symbols = ['ETH']  
     numero_massimo_ordini = 2
