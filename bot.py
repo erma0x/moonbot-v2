@@ -106,30 +106,32 @@ def main():
         usdt_min_quantity = usdt_info['filters'][2]['minQty']
         
         print('QUANTITA MINIME ', busd_min_quantity,usdt_min_quantity)
+        numero_massimo_ordini = 2
+        for numero_ordine in range(numero_massimo_ordini):
+            if float(guadagno_percentuale) >= minimo_guadagno_percentuale:
+                print('\n**** APRO OPERAZIONE ****\n')
 
-        if float(guadagno_percentuale) >= minimo_guadagno_percentuale:
-            print('\n**** APRO OPERAZIONE ****\n')
-
-            if usdtheter['price'] > usdbinance['price']:
-                print('eseguo operazione con BUSD')
-                coin_quantity = investimento/float(usdbinance['price'])
-                order = client.order_limit_buy(timeInForce='GTC',
-                    symbol = i+'BUSD',
-                    quantity = format_coin_quantity(coin_quantity),
-                    price = round(float(usdbinance['price']),2))
+                if usdtheter['price'] > usdbinance['price']:
+                    print('eseguo operazione con BUSD')
+                    coin_quantity = investimento/float(usdbinance['price'])
+                    order = client.order_limit_buy(timeInForce='GTC',
+                        symbol = i+'BUSD',
+                        quantity = format_coin_quantity(coin_quantity),
+                        price = round(float(usdbinance['price']),2))
 
 
-            if usdtheter['price'] < usdbinance['price']:
-                print('eseguo operazione con USDT')
-                coin_quantity = investimento/float(usdtheter['price'])
-                order = client.order_limit_buy(timeInForce='GTC',
-                    symbol=i+'USDT',
-                    quantity = format_coin_quantity(coin_quantity),
-                    price=round(float(usdtheter['price']),2))
+                if usdtheter['price'] < usdbinance['price']:
+                    print('eseguo operazione con USDT')
+                    coin_quantity = investimento/float(usdtheter['price'])
+                    order = client.order_limit_buy(timeInForce='GTC',
+                        symbol=i+'USDT',
+                        quantity = format_coin_quantity(coin_quantity),
+                        price=round(float(usdtheter['price']),2))
 
-            open_orders.append(order)
-                #'origQty': '0.00490000', 'executedQty': '0.00000000'
-
+                open_orders.append(order)
+                    #'origQty': '0.00490000', 'executedQty': '0.00000000'
+        
+        time.sleep(1)
         for my_order in open_orders:
             if my_order['executedQty'] == my_order['origQty']: # SE GLI ORDINI SONO STATI FILLATI 
 
