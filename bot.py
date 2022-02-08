@@ -61,13 +61,16 @@ def main():
     api_secret = os.environ.get('binance_secret')
     
     client = Client(api_key, api_secret) 
-     
+
     status = client.get_system_status()
 
     print('system status  (default = normal)\t:',status['msg'].upper())
     print('price test ETH-USDT \t\t',client.get_avg_price(symbol='ETHUSDT'))
-    #ticker = client.get_symbol_tickers(symbol=pair)
-
+    
+    
+    ticker = client.get_symbol_tickers(symbol=pair)
+    print('MY TICKER')
+    
     # info_snapshot = client.get_account_snapshot(type='SPOT')
     # print('snapshot account ',info_snapshot)
 
@@ -83,7 +86,7 @@ def main():
     leverage = 1
     minimo_guadagno_assoluto = 1
     minimo_guadagno_percentuale = 0.02 # in %
-
+    open_orders = []
     my_symbols = ['ETH']    #my_symbols = client.get_all_tickers()   
 
     for i in my_symbols:
@@ -114,7 +117,7 @@ def main():
                     symbol = i+'BUSD',
                     quantity = format_coin_quantity(coin_quantity),
                     price = round(float(usdbinance['price']),2))
-            
+
 
             if usdtheter['price'] < usdbinance['price']:
                 print('eseguo operazione con USDT')
@@ -124,11 +127,26 @@ def main():
                     quantity = format_coin_quantity(coin_quantity),
                     price=round(float(usdtheter['price']),2))
 
+            open_orders.append(order)
+                #'origQty': '0.00490000', 'executedQty': '0.00000000'
 
+        for my_order in open_orders:
+            if my_order['executedQty'] == my_order['origQty']: # SE GLI ORDINI SONO STATI FILLATI 
 
+                if 'USDT' in my_order['symbol'] :
+                    coin_quantity = investimento/float(usdtheter['price'])
+                    order = client.order_limit_sell(timeInForce='GTC',
+                        symbol=i+'BUSD',
+                        quantity = format_coin_quantity(coin_quantity),
+                        price=round(float(usdbinance['price']),2))
 
-            if order:
-                print(order)
+                if 'BUSD' in my_order['symbol'] :
+                    coin_quantity = investimento/float(usdtheter['price'])
+                    order = client.order_limit_sell(timeInForce='GTC',
+                        symbol=i+'USDT',
+                        quantity = format_coin_quantity(coin_quantity),
+                        price=round(float(usdtheter['price']),2))
+
 
 if __name__ == "__main__":   
     main()
