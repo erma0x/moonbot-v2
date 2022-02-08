@@ -1,0 +1,5 @@
+{'symbol': 'ETHUSDT', 'orderId': 7760933105, 'orderListId': -1, 
+'clientOrderId': 'RKPcQ9jAOT8LlUYK3xygGB', 'transactTime': 1644342622758, 
+'price': '3040.28000000', 'origQty': '0.00490000', 'executedQty': '0.00000000', 
+'cummulativeQuoteQty': '0.00000000', 'status': 'NEW', 'timeInForce': 'GTC',
+ 'type': 'LIMIT', 'side': 'BUY', 'fills': []}

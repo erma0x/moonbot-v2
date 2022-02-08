@@ -60,7 +60,8 @@ def main():
     api_key = os.environ.get('binance_api')
     api_secret = os.environ.get('binance_secret')
     
-    client = Client(api_key, api_secret)  
+    client = Client(api_key, api_secret) 
+     
     status = client.get_system_status()
 
     print('system status  (default = normal)\t:',status['msg'].upper())
@@ -113,6 +114,7 @@ def main():
                     symbol = i+'BUSD',
                     quantity = format_coin_quantity(coin_quantity),
                     price = round(float(usdbinance['price']),2))
+            
 
             if usdtheter['price'] < usdbinance['price']:
                 print('eseguo operazione con USDT')
@@ -121,7 +123,10 @@ def main():
                     symbol=i+'USDT',
                     quantity = format_coin_quantity(coin_quantity),
                     price=round(float(usdtheter['price']),2))
-            
+
+
+
+
             if order:
                 print(order)
 
