@@ -7,24 +7,30 @@ Function to round the value according to decimal places in Binance.
 When placing a purchase order with API you get the LOT_SIZE error.
 To avoid the error you must round the decimal places according to the 'stepSize' of each coin.
 """
-
-symbol = 'ETHUSDT'
-URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
-result = requests.get(URL).json()
+from pprint import pprint
 
 
-def round_coin_quantity(num, stepSize, direction = floor):
+
+def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',direction = floor):
+    URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
+    result = requests.get(URL).json()
+    pprint('RISULTATI ',result)
+
+    numbers_after_zero = result['symbols'][0]['filters'][2]['stepSize']
+    print('NUMERI DOPO LO ZERO ',numbers_after_zero)
+
     zeros = 0
-    number = float(stepSize)
+    number = float(numbers_after_zero)
     while number < 0.1:
         number *= 10
         zeros += 1
-    if float(stepSize) > 0.1:
+    if float(numbers_after_zero) > 0.1:
         places = zeros
     else:
         places = zeros + 1
-    return direction(num * (10**places)) / float(10**places)
+    return direction(initial_coin_quantity * (10**places)) / float(10**places)
 
-print('results ',result)
-value = round_coin_quantity(324.92839238092803, result['symbols'][0]['filters'][2]['stepSize'])
+
+value = format_coin_quantity( 324.214218462874612,symbol='BTCUSDT' )
+
 print('value ',value)
