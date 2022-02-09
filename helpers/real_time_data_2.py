@@ -1,30 +1,34 @@
+import time
 
-import os
-import configparser
-from binance.client import Client
-from binance.Websockets import BinanceSocketManager
-from twisted.internet import reactor 
+from binance import ThreadedWebsocketManager
 
-# Loading keys from config file
-api_key = os.environ.get('binance_api')
-api_secret = os.environ.get('binance_secret')
+api_key = '<api_key'>
+api_secret = '<api_secret'>
 
-client = Client(api_key, api_secret)
+def main():
+
+    symbol = 'BNBBTC'
+
+    twm = ThreadedWebsocketManager(api_key=api_key, api_secret=api_secret)
+    # start is required to initialise its internal loop
+    twm.start()
+
+    def handle_socket_message(msg):
+        print(f"message type: {msg['e']}")
+        print(msg)
+
+    twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
+
+    # multiple sockets can be started
+    twm.start_depth_socket(callback=handle_socket_message, symbol=symbol)
+
+    # or a multiplex socket can be started like this
+    # see Binance docs for stream names
+    streams = ['bnbbtc@miniTicker', 'bnbbtc@bookTicker']
+    twm.start_multiplex_socket(callback=handle_socket_message, streams=streams)
+
+    twm.join()
 
 
-def streaming_data_process(msg):
-    """
-    Function to process the received messages
-    param msg: input message
-    """
-    print(f"message type: {msg['e']}")
-    print(f"close price: {msg['c']}")
-    print(f"best ask price: {msg['a']}")
-    print(f"best bid price: {msg['b']}")
-    print("---------------------------")
-
-
-# Starting the WebSocket
-bm = BinanceSocketManager(client)
-conn_key = bm.start_symbol_ticker_socket('ETHUSDT', streaming_data_process)
-bm.start()
+if __name__ == "__main__":
+   main()
