@@ -2,7 +2,7 @@
 import os
 import configparser
 from binance.client import Client
-from binance.websockets import BinanceSocketManager
+from binance.Websockets import BinanceSocketManager
 from twisted.internet import reactor 
 
 # Loading keys from config file
