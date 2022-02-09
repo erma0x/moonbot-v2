@@ -11,7 +11,6 @@ def handle_socket_message(msg):
     print(msg)
     twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
 
-
 depth_stream_name = twm.start_depth_socket(callback=handle_socket_message, symbol=symbol)
 
 

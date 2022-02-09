@@ -1,0 +1,10 @@
+# INSTALLA
+npm install -g wscat
+
+# LANCIA
+
+wscat -c wss://stream.binance.com:9443/ws/btcusdt@trade
+
+wscat -c wss://stream.binance.com:9443/ws/btcusdt@kline_5m
+
+

@@ -1,6 +1,15 @@
 # GreenRock Robota
 ### Trading arbitrage bot in the Binance exchange 
 
+# COSTI
+swap 10 centesimi
+
+
+X/BUSD
+X/BNB
+BUSD/BNB
+
+
 ## TO DO
 APIError(code=-1013): Filter failure: MIN_NOTIONAL
 
