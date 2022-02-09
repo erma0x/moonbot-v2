@@ -22,7 +22,8 @@ def streaming_data_process(msg):
     print(f"best ask price: {msg['a']}")
     print(f"best bid price: {msg['b']}")
     print("---------------------------")
-    
+
+
 # Starting the WebSocket
 bm = BinanceSocketManager(client)
 conn_key = bm.start_symbol_ticker_socket('ETHUSDT', streaming_data_process)

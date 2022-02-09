@@ -5,6 +5,11 @@
 swap 10 centesimi
 
 
+# COPPIE
+X/BUSD
+X/usdt
+BUSD/usdt
+
 X/BUSD
 X/BNB
 BUSD/BNB
