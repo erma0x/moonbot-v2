@@ -37,7 +37,7 @@ async def get_data(client,token_pair='BNBUSDT'):
     bm = BinanceSocketManager(client)
     async with bm.kline_socket(symbol=token_pair) as stream:        
         res = await stream.recv()
-        print('date: ',timestamp_to_date(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
+        #print('date: ',timestamp_to_date(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
         return(res['k']['c']) 
 
 async def main():
@@ -45,9 +45,12 @@ async def main():
     api_secret = os.environ.get('binance_secret')
     client = await AsyncClient.create(api_key, api_secret)
     my_symbols = ['ETH','BTC'] 
-    investimento=200
+    investimento=15
     leverage=1
-
+    minimo_guadagno_assoluto = 1
+    percentuale_minimo_guadagno = 0.002
+    open_orders = []
+    numero_massimo_ordini = 2
     symbol = 'AAVE'
 
     while True:
@@ -57,19 +60,21 @@ async def main():
         priceBUSD = float(dataBUSD)
         #print(symbol+'USDT : ',priceUSDT,'\t',symbol+'BUSD : ',priceBUSD)
         coin_quantity = investimento/min(priceUSDT,priceBUSD)
-        guadagno_assoluto = max(priceUSDT,priceBUSD)/min(priceUSDT,priceBUSD) * investimento - investimento
+        guadagno_assoluto = (max(priceUSDT,priceBUSD)/min(priceUSDT,priceBUSD) * investimento - investimento) * leverage
         guadagno_percentuale = guadagno_assoluto/investimento*100
-        print('guadagno stimato $ ',round(guadagno_assoluto,4))
-        if guadagno_assoluto>0.05:
+        #print('guadagno stimato $ ',guadagno_assoluto)
+        if guadagno_percentuale>0.05:
             if min(priceUSDT,priceBUSD) == priceUSDT:
-                print('USDT ')
+                stablecoin='USDT'
+                
             else:
-                print(' BUSD ')
+                stablecoin='BUSD'
             testo = ''' \n\n
-            MOONBOT APRE OPERAZIONE 🌝
-                guadagno assoluto stimato $ {0}
-                guadagno precentuale stimato % {1} \n\n
-            '''.format(round(guadagno_assoluto,4),round(guadagno_percentuale,6))
+                    Moonbot 🌝 Open Operation  \n
+                    COMPRA una quantita di {0} con  {investimento}
+                    guadagno assoluto stimato in {1} {2}
+                    guadagno precentuale stimato % {3} \n\n
+            '''.format(coin_quantity,stablecoin,round(guadagno_assoluto,4),round(guadagno_percentuale,6))
             print(testo)
 
 
