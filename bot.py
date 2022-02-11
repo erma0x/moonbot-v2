@@ -36,19 +36,19 @@ def timestamp_to_date(time):
 
 async def get_data(client,token_pair='BNBUSDT'):
     bm = BinanceSocketManager(client)
-    async with bm.kline_socket(symbol=token_pair) as stream:
-        while True:
-            res = await stream.recv()
-            print('date: ',timestamp_to_date(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
-            return res['k']['c'] # closing price
+    async with bm.kline_socket(symbol=token_pair) as stream:        
+        res = await stream.recv()
+        print('date: ',timestamp_to_date(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
+        return res['k']['c'] # closing price
 
 async def main():
     api_key = os.environ.get('binance_api') 
     api_secret = os.environ.get('binance_secret')
     client = await AsyncClient.create(api_key, api_secret)
-    dataUSDT = await get_data(client,token_pair='BNBBTC')
-    dataBUSD = await get_data(client,token_pair='BNBBTC')
-    print(dataUSDT,dataBUSD)
+    while True:
+        dataUSDT = await get_data(client,token_pair='BNBBTC')
+        dataBUSD = await get_data(client,token_pair='BNBBTC')
+        print(dataUSDT,dataBUSD)
 
 
 
