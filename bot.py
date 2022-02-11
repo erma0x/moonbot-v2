@@ -60,10 +60,12 @@ async def main():
             else:
                 print('ipotetico investimento in BUSD :',coin_quantity)
             guadagno_assoluto = abs(priceUSDT-priceBUSD) * coin_quantity
-            print('guadagno assoluto $ ',guadagno_assoluto)
-            guadagno_percentuale = guadagno_assoluto/investimento
-            print('guadagno precentuale % ',guadagno_percentuale)
-            print('-'*80)
+            guadagno_percentuale = guadagno_assoluto/investimento*100
+            if guadagno_percentuale>0.05:
+                print('Apro operazione')
+                print('guadagno assoluto $ ',guadagno_assoluto)
+                print('guadagno precentuale % ',guadagno_percentuale)
+                print('-'*80)
 
 
 
