@@ -1,5 +1,6 @@
 import requests
 import datetime
+from math import ceil, floor
 
 async def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',direction = floor):
     URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
