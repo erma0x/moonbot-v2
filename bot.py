@@ -40,7 +40,7 @@ async def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',directi
 
 def timestamp_to_datetime(time):
     time=str(time)
-    return(datetime.fromtimestamp(int(time[:-3])).strftime('%d-%m-%Y %H:%M:%S'))
+    return(datetime.timestamp(int(time[:-3])).strftime('%d-%m-%Y %H:%M:%S'))
 
 async def get_balance(client):
     USDT_balance = await client.get_asset_balance(asset='USDT')
