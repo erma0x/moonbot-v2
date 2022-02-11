@@ -20,4 +20,4 @@ def timestamp_to_datetime(time):
     time=str(time)
     return(datetime.fromtimestamp(int(time[:-3])).strftime('%d-%m-%Y %H:%M:%S'))
 
-timestamp_to_datetime('1644599819999')
+print(timestamp_to_datetime('1644599819999'))
