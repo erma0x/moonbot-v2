@@ -1,2 +1,5 @@
 from datetime import datetime
-print(datetime.fromtimestamp(int("1644599819999"[:-3])).strftime('%d-%m-%Y %H:%M:%S'))
+
+def converti_timestamp_in_data(time="1644599819999"):
+    time=str(time)
+    return(datetime.fromtimestamp(int(time[:-3])).strftime('%d-%m-%Y %H:%M:%S'))
