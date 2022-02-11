@@ -70,9 +70,11 @@ async def main():
     api_secret = os.environ.get('binance_secret')
     client = await AsyncClient.create(api_key, api_secret)     
     bm = BinanceSocketManager(client)
-    response = await get_stream_data(bm,token='BNB')
-    data = await response.json()
-    print(data)
+    token='BTC'
+    while True:
+        res = await bm.kline_socket(symbol=token+'USDT').recv()
+        print('symbol: ',res['s'],' date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
+        
     # investimento = 15
     # leverage = 1
     # minimo_guadagno_assoluto = 1
