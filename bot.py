@@ -57,7 +57,7 @@ async def main():
         priceBUSD = float(dataBUSD)
         #print(symbol+'USDT : ',priceUSDT,'\t',symbol+'BUSD : ',priceBUSD)
         coin_quantity = investimento/min(priceUSDT,priceBUSD)
-        guadagno_assoluto = max(priceUSDT,priceBUSD)/min(priceUSDT,priceBUSD) * investimento
+        guadagno_assoluto = max(priceUSDT,priceBUSD)/min(priceUSDT,priceBUSD) * investimento - investimento
         guadagno_percentuale = guadagno_assoluto/investimento*100
         print('guadagno stimato $ ',round(guadagno_assoluto,4))
         if guadagno_assoluto>0.05:
@@ -69,7 +69,7 @@ async def main():
             MOONBOT APRE OPERAZIONE 🌝
                 guadagno assoluto stimato $ {0}
                 guadagno precentuale stimato % {1} \n\n
-            '''.format(round(guadagno_assoluto,2),round(guadagno_percentuale,2))
+            '''.format(round(guadagno_assoluto,4),round(guadagno_percentuale,6))
             print(testo)
 
 
