@@ -48,8 +48,8 @@ async def main():
     my_symbols = ['ETH','BTC'] 
     while True:
         for symbol in my_symbols:
-            dataUSDT = await get_data(client,token_pair=symbol+'BUSD')
-            dataBUSD = await get_data(client,token_pair=symbol+'USDT')
+            dataUSDT = await get_data(client,token_pair=symbol+'BUSD').json()
+            dataBUSD = await get_data(client,token_pair=symbol+'USDT').json()
             print(symbol+'USDT: ',dataUSDT,' | ',symbol+'BUSD ',dataBUSD)
             print('-'*80)
 
