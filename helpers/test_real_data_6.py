@@ -8,7 +8,6 @@ async def kline_listener(client):
             res = await stream.recv()
             print(res)
 
-
 async def main():
     client = await AsyncClient.create()
     await kline_listener(client)
