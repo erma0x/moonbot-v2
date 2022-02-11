@@ -1,6 +1,6 @@
 import requests
-import datetime
-from math import ceil, floor
+from datetime import datetime
+from math import floor
 
 async def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',direction = floor):
     URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
@@ -19,6 +19,6 @@ async def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',directi
 
 def timestamp_to_datetime(time):
     time=str(time)
-    return(datetime.fromtimestamp(int(time[:-3])).strftime('%d-%m-%Y %H:%M:%S'))
+    return(datetime.time(int(time[:-3])).strftime('%d-%m-%Y %H:%M:%S'))
 
 print(timestamp_to_datetime('1644599819999'))
