@@ -24,7 +24,6 @@ def prendi_i_prezzi(cliente,symbol1,symbol2):
     price_busd = cliente.get_avg_price(symbol=symbol2) #
     return(price_usdt,price_busd)
 
-
 def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',direction = floor):
     URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
     result = requests.get(URL).json()
@@ -54,7 +53,7 @@ async def main():
     investimento = 11
     leverage = 1
     minimo_guadagno_assoluto = 1
-    percentuale_minimo_guadagno = 0.002     # in %
+    percentuale_minimo_guadagno = 0.002     
     open_orders = []
     my_symbols = ['ETH']  
     numero_massimo_ordini = 2
@@ -105,7 +104,6 @@ async def main():
         
         for my_order in open_orders:
             if my_order['executedQty'] == my_order['origQty']: # SE GLI ORDINI SONO STATI FILLATI 
-
                 if 'USDT' in my_order['symbol'] :
                     coin_quantity = investimento/float(usdtheter['price'])
                     order = client.order_limit_sell(timeInForce='GTC',
@@ -120,14 +118,10 @@ async def main():
                         quantity = format_coin_quantity(coin_quantity),
                         price=round(float(usdtheter['price']),2))
 
-if __name__ == "__main__":
-    main()
 
-async def main():
-    api_key = os.environ.get('binance_api')
-    api_secret = os.environ.get('binance_secret')
-    client = await AsyncClient.create(api_key, api_secret)   
-    #doge_busd = client.get_symbol_ticker(symbol="DOGEBUSD")
+# if __name__ == "__main__":
+#     main()
+
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
