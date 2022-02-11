@@ -72,7 +72,7 @@ async def main():
     minimo_guadagno_assoluto = 1
     percentuale_minimo_guadagno = 0.002     
     open_orders = []
-    my_symbols = ['ETH','BTC']  
+    my_symbols = ['ETH']  
     numero_massimo_ordini = 2
 
     for symbol in my_symbols:
