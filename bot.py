@@ -70,7 +70,7 @@ async def main():
                 guadagno assoluto stimato $ {0}
                 guadagno precentuale stimato % {1} \n\n
             '''.format(round(guadagno_assoluto,2),round(guadagno_percentuale,2))
-
+            print(testo)
 
 
 if __name__ == "__main__":
