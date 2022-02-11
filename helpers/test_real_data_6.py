@@ -8,7 +8,7 @@ async def kline_listener(client):
     async with bm.kline_socket(symbol='BNBBTC') as stream:
         while True:
             res = await stream.recv()
-            print('date: ',converti_timestamp_in_data(res['T']), '  price: ',res['c'] , ' volume: ',res['V'])
+            print('date: ',converti_timestamp_in_data(res['k']['T']), '  price: ',res['k']['c'] , ' volume: ',res['k']['V'])
 
 async def main():
     client = await AsyncClient.create()
