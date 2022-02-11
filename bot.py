@@ -14,7 +14,6 @@ from math import floor
 #from binance.enums import *
 from binance import AsyncClient, BinanceSocketManager
 
-
 async def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',direction = floor):
     URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
     result = await requests.get(URL).json()
@@ -46,11 +45,17 @@ async def main():
     api_secret = os.environ.get('binance_secret')
     client = await AsyncClient.create(api_key, api_secret)
     my_symbols = ['ETH','BTC'] 
+    investimento=200
+    leverage=1
     while True:
         for symbol in my_symbols:
             dataUSDT = await get_data(client,token_pair=symbol+'BUSD')
             dataBUSD = await get_data(client,token_pair=symbol+'USDT')
             print(symbol+'USDT: ',dataUSDT,' | ',symbol+'BUSD ',dataBUSD)
+            guadagno_assoluto = abs(dataUSDT-dataBUSD) * investimento * leverage
+            print('guadagno assoluto $ ',guadagno_assoluto)
+            guadagno_percentuale = guadagno_assoluto/investimento
+            print('guadagno precentuale % ',guadagno_percentuale*100)
             print('-'*80)
 
 
