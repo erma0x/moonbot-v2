@@ -30,40 +30,16 @@ async def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',directi
         places = zeros + 1
     return direction(initial_coin_quantity * (10**places)) / float(10**places)
 
-def timestamp_to_datetime(time):
+def timestamp_to_date(time):
     time=str(time)
-    return(datetime.timestamp(int(time[:-3])).strftime('%d-%m-%Y %H:%M:%S'))
-
-async def get_balance(client):
-    USDT_balance = await client.get_asset_balance(asset='USDT')
-    BUSD_balance = await client.get_asset_balance(asset='BUSD')
-    print('YOUR BALANCE in: \n- USDT balance : ',USDT_balance['free'],'\n- BUSD balance : ',BUSD_balance['free'])
-    return USDT_balance, BUSD_balance
-
-async def test_connection(client):
-    status = await client.get_system_status()
-    print('system status  (default = normal)\t:',status['msg'].upper())
-    print('price 5 min ago of ETH-USDT \t\t',client.get_avg_price(symbol='ETHUSDT'))
-
-async def test_stream_data(client):
-    bm = BinanceSocketManager(client)
-    async with bm.kline_socket(symbol='BNBBTC') as stream:
-        while True:
-            res = await stream.recv()
-            print('date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
-
-async def get_stream_data(binanceSocketManager,token):
-    while True:
-        res = await binanceSocketManager.kline_socket(symbol=token+'USDT').recv()
-        print('symbol: ',res['s'],' date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
-
+    return(datetime.fromtimestamp(int(time[:-3])).strftime('%d-%m-%Y %H:%M:%S'))
 
 async def get_data(client,token_pair='BNBUSDT'):
     bm = BinanceSocketManager(client)
     async with bm.kline_socket(symbol=token_pair) as stream:
         while True:
             res = await stream.recv()
-            print('date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
+            print('date: ',timestamp_to_date(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
             return res['k']['c'] # closing price
 
 async def main():
