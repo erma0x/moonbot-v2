@@ -45,10 +45,13 @@ async def main():
     api_key = os.environ.get('binance_api') 
     api_secret = os.environ.get('binance_secret')
     client = await AsyncClient.create(api_key, api_secret)
+    my_symbols = ['ETH','BTC'] 
     while True:
-        dataUSDT = await get_data(client,token_pair='BNBBTC')
-        dataBUSD = await get_data(client,token_pair='BNBBTC')
-        print(dataUSDT,dataBUSD)
+        for symbol in my_symbols:
+            dataUSDT = await get_data(client,token_pair=symbol+'BUSD')
+            dataBUSD = await get_data(client,token_pair=symbol+'USDT')
+            print(symbol+'USDT: ',dataUSDT,' | ',symbol+'BUSD ',dataBUSD)
+            print('-'*80)
 
 
 
