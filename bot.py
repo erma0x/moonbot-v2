@@ -71,10 +71,10 @@ async def main():
                 stablecoin='BUSD'
             testo = ''' \n\n
                     Moonbot 🌝 Open Operation  \n
-                    COMPRA una quantita di {0} con  {investimento}
+                    COMPRA una quantita di {0}
                     guadagno assoluto stimato in {1} {2}
                     guadagno precentuale stimato % {3} \n\n
-            '''.format(coin_quantity,stablecoin,round(guadagno_assoluto,4),round(guadagno_percentuale,6))
+            '''.format(coin_quantity,stablecoin,guadagno_assoluto,guadagno_percentuale)
             print(testo)
 
 
