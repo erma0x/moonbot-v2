@@ -45,8 +45,8 @@ async def main():
     api_secret = os.environ.get('binance_secret')
     client = await AsyncClient.create(api_key, api_secret)
     my_symbols = ['ETH','BTC'] 
-    investimento=15
-    leverage=1
+    investimento=2000
+    leverage=2
     minimo_guadagno_assoluto = 1
     percentuale_minimo_guadagno = 0.002
     open_orders = []
@@ -71,9 +71,9 @@ async def main():
                 stablecoin='BUSD'
             testo = ''' \n\n
                     Moonbot 🌝 Open Operation  \n
-                    COMPRA una quantita di {0}
-                    guadagno assoluto stimato in {1} {2}
-                    guadagno precentuale stimato % {3} \n\n
+                    COMPRA una quantita di \t {0}
+                    guadagno assoluto stimato in   {1}  \t {2}
+                    guadagno precentuale stimato \t  % {3} \n\n
             '''.format(coin_quantity,stablecoin,guadagno_assoluto,guadagno_percentuale)
             print(testo)
 
