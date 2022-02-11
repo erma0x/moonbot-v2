@@ -25,19 +25,10 @@ def prendi_i_prezzi(cliente,symbol1,symbol2):
     return(price_usdt,price_busd)
 
 
-def calcola_guadagno(price_usdt,price_busd,capitale=15,leva=1):
-    a ,b =float(price_usdt['price']), float(price_busd['price'])
-    differenza_percentuale = abs(a-b)/max(a,b)
-    guadagno_assoluto = differenza_percentuale * capitale * leva 
-    guadagno_percentuale = guadagno_assoluto/capitale * 100
-    return(guadagno_assoluto,guadagno_percentuale)
-
-
 def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',direction = floor):
     URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
     result = requests.get(URL).json()
     numbers_after_zero = result['symbols'][0]['filters'][2]['stepSize']
-
     zeros = 0
     number = float(numbers_after_zero)
     while number < 0.1:
@@ -63,7 +54,7 @@ async def main():
     investimento = 11
     leverage = 1
     minimo_guadagno_assoluto = 1
-    minimo_guadagno_percentuale = 0.002 # in %
+    percentuale_minimo_guadagno = 0.002     # in %
     open_orders = []
     my_symbols = ['ETH']  
     numero_massimo_ordini = 2
@@ -73,10 +64,10 @@ async def main():
     print('YOUR BALANCE in: \n- USDT balance : ',USDT_balance['free'],'\n- BUSD balance : ',BUSD_balance['free'])
     
     for i in my_symbols:
-        usdtheter,usdbinance = prendi_i_prezzi(cliente=client,symbol1=i+'USDT',symbol2=i+'BUSD')
+        usdtheter,usdbinance = await prendi_i_prezzi(cliente=client,symbol1=i+'USDT',symbol2=i+'BUSD')
 
-        guadagno_assoluto, guadagno_percentuale = calcola_guadagno(price_usdt=usdtheter,price_busd=usdbinance,
-                                                    capitale=investimento,leva=leverage)
+        guadagno_assoluto = abs(usdtheter-usdbinance) * investimento * leverage
+        guadagno_percentuale = guadagno_assoluto/investimento
 
         print('-'*80+'\nsimbolo: ',i)
         print('\nPREZZO in Theter \tUSDT \t: ',usdtheter['price'],'\nprezzo in binance USD\tBUSD \t: ',usdbinance['price'])
@@ -91,7 +82,7 @@ async def main():
         print('QUANTITA MINIME ', busd_min_quantity,usdt_min_quantity)
  
         if len(open_orders) < numero_massimo_ordini:
-            if float(guadagno_percentuale) >= minimo_guadagno_percentuale:
+            if float(guadagno_percentuale) >= percentuale_minimo_guadagno:
                 print('\n**** APRO OPERAZIONE ****\n')
 
                 if usdtheter['price'] > usdbinance['price']:
