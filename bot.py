@@ -51,11 +51,18 @@ async def main():
         for symbol in my_symbols:
             dataUSDT = await get_data(client,token_pair=symbol+'BUSD')
             dataBUSD = await get_data(client,token_pair=symbol+'USDT')
-            print(symbol+'USDT: ',dataUSDT,' | ',symbol+'BUSD ',dataBUSD)
-            guadagno_assoluto = abs(float(dataUSDT)-float(dataBUSD)) * investimento * leverage
+            priceUSDT = float(dataUSDT)
+            priceBUSD = float(dataBUSD)
+            print(symbol+'USDT: ',priceUSDT,' | ',symbol+'BUSD ',priceBUSD)
+            coin_quantity = investimento/min(priceUSDT,priceBUSD)
+            if min(priceUSDT,priceBUSD) ==priceUSDT:
+                print('ipotetico investimento in USDT :',coin_quantity)
+            else:
+                print('ipotetico investimento in BUSD :',coin_quantity)
+            guadagno_assoluto = abs(priceUSDT-priceBUSD) * coin_quantity
             print('guadagno assoluto $ ',guadagno_assoluto)
             guadagno_percentuale = guadagno_assoluto/investimento
-            print('guadagno precentuale % ',guadagno_percentuale*100)
+            print('guadagno precentuale % ',guadagno_percentuale)
             print('-'*80)
 
 
