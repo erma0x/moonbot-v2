@@ -38,7 +38,7 @@ async def get_data(client,token_pair='BNBUSDT'):
     async with bm.kline_socket(symbol=token_pair) as stream:        
         res = await stream.recv()
         print('date: ',timestamp_to_date(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
-        return(res['k']['c']) # closing price
+        return(res['k']['c']) 
 
 async def main():
     api_key = os.environ.get('binance_api') 
@@ -57,14 +57,14 @@ async def main():
         priceBUSD = float(dataBUSD)
         #print(symbol+'USDT : ',priceUSDT,'\t',symbol+'BUSD : ',priceBUSD)
         coin_quantity = investimento/min(priceUSDT,priceBUSD)
-        guadagno_assoluto = abs(priceUSDT-priceBUSD) * coin_quantity
+        guadagno_assoluto = max(priceUSDT,priceBUSD)/min(priceUSDT,priceBUSD) * investimento
         guadagno_percentuale = guadagno_assoluto/investimento*100
-        print('guadagno stimato $ ',guadagno_assoluto)
-        if guadagno_percentuale>0.05:
+        print('guadagno stimato $ ',round(guadagno_assoluto,4))
+        if guadagno_assoluto>0.05:
             if min(priceUSDT,priceBUSD) == priceUSDT:
-                print('investimento in USDT :',coin_quantity)
+                print('USDT ')
             else:
-                print('investimento in BUSD :',coin_quantity)
+                print(' BUSD ')
             testo = ''' \n\n
             MOONBOT APRE OPERAZIONE 🌝
                 guadagno assoluto stimato $ {0}
