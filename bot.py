@@ -52,7 +52,7 @@ async def main():
             dataUSDT = await get_data(client,token_pair=symbol+'BUSD')
             dataBUSD = await get_data(client,token_pair=symbol+'USDT')
             print(symbol+'USDT: ',dataUSDT,' | ',symbol+'BUSD ',dataBUSD)
-            guadagno_assoluto = abs(dataUSDT-dataBUSD) * investimento * leverage
+            guadagno_assoluto = abs(float(dataUSDT)-float(dataBUSD)) * investimento * leverage
             print('guadagno assoluto $ ',guadagno_assoluto)
             guadagno_percentuale = guadagno_assoluto/investimento
             print('guadagno precentuale % ',guadagno_percentuale*100)
