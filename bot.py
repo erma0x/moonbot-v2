@@ -6,6 +6,7 @@ export binance_api="your_api_key_here"
 export binance_secret="your_api_secret_here"
 """
 from math import ceil, floor
+from wsgiref.handlers import format_date_time
 import requests
 import json
 import asyncio
@@ -63,17 +64,39 @@ async def get_stream_data(binanceSocketManager,token):
     while True:
         res = await binanceSocketManager.kline_socket(symbol=token+'USDT').recv()
         print('symbol: ',res['s'],' date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
-        
 
-async def main():    
-    api_key = os.environ.get('binance_api')
-    api_secret = os.environ.get('binance_secret')
-    client = await AsyncClient.create(api_key, api_secret)     
+
+async def get_data(client,token_pair='BNBUSDT'):
     bm = BinanceSocketManager(client)
-    token='BTC'
-    while True:
-        res = await bm.kline_socket(symbol=token+'USDT').recv()
-        print('symbol: ',res['s'],' date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
+    async with bm.kline_socket(symbol=token_pair) as stream:
+        while True:
+            res = await stream.recv()
+            print('date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
+            return res['k']['c'] # closing price
+
+async def main():
+    api_key = os.environ.get('binance_api') 
+    api_secret = os.environ.get('binance_secret')
+    client = await AsyncClient.create(api_key, api_secret)
+    dataUSDT = await get_data(client,token_pair='BNBBTC')
+    dataBUSD = await get_data(client,token_pair='BNBBTC')
+    print(dataUSDT,dataBUSD)
+
+
+
+if __name__ == "__main__":
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
+
+# async def main():    
+#     api_key = os.environ.get('binance_api')
+#     api_secret = os.environ.get('binance_secret')
+#     client = await AsyncClient.create(api_key, api_secret)     
+#     bm = BinanceSocketManager(client)
+#     token='BTC'
+#     while True:
+#         res = await bm.kline_socket(symbol=token+'USDT').recv()
+#         print('symbol: ',res['s'],' date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
         
     # investimento = 15
     # leverage = 1
@@ -141,6 +164,6 @@ async def main():
                 #                 price=round(float(usdtheter['price']),2))
 
 
-if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
+# if __name__ == "__main__":
+#     loop = asyncio.get_event_loop()
+#     loop.run_until_complete(main())
