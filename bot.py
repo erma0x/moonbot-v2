@@ -39,7 +39,7 @@ async def get_data(client,token_pair='BNBUSDT'):
     async with bm.kline_socket(symbol=token_pair) as stream:        
         res = await stream.recv()
         print('date: ',timestamp_to_date(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
-        return res['k']['c'] # closing price
+        return(res['k']['c']) # closing price
 
 async def main():
     api_key = os.environ.get('binance_api') 
@@ -48,8 +48,8 @@ async def main():
     my_symbols = ['ETH','BTC'] 
     while True:
         for symbol in my_symbols:
-            dataUSDT = await get_data(client,token_pair=symbol+'BUSD').json()
-            dataBUSD = await get_data(client,token_pair=symbol+'USDT').json()
+            dataUSDT = await get_data(client,token_pair=symbol+'BUSD')
+            dataBUSD = await get_data(client,token_pair=symbol+'USDT')
             print(symbol+'USDT: ',dataUSDT,' | ',symbol+'BUSD ',dataBUSD)
             print('-'*80)
 
