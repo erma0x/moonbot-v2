@@ -5,23 +5,15 @@ in the shell ...
 export binance_api="your_api_key_here"
 export binance_secret="your_api_secret_here"
 """
-from math import ceil, floor
-from wsgiref.handlers import format_date_time
-import requests
-import json
-import asyncio
-from re import T
-import datetime
-from http import client
 import os
-from unicodedata import decimal
-import urllib 
-import http
+import requests
 import asyncio
-import time
-import datetime
-from binance import AsyncClient, BinanceSocketManager
+import asyncio
+from datetime import datetime
+from math import floor
 #from binance.enums import *
+from binance import AsyncClient, BinanceSocketManager
+
 
 async def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',direction = floor):
     URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
