@@ -18,6 +18,7 @@ import urllib
 import http
 import asyncio
 import time
+import datetime
 
 from binance.enums import *
 from binance import AsyncClient, BinanceSocketManager
@@ -47,7 +48,6 @@ async def get_balance(client):
     print('YOUR BALANCE in: \n- USDT balance : ',USDT_balance['free'],'\n- BUSD balance : ',BUSD_balance['free'])
     return USDT_balance, BUSD_balance
 
-
 async def test_connection(client):
     status = await client.get_system_status()
     print('system status  (default = normal)\t:',status['msg'].upper())
@@ -60,27 +60,30 @@ async def test_stream_data(client):
             res = await stream.recv()
             print('date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
 
+async def get_stream_data(binanceSocketManager):
+    async with binanceSocketManager.kline_socket(symbol=symbol+'USDT') as stream:
+        while True:
+            res = await stream.recv()
+            print('symbol: ',res['s'],' date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
+            
 
 async def main():    
     api_key = os.environ.get('binance_api')
     api_secret = os.environ.get('binance_secret')
     client = await AsyncClient.create(api_key, api_secret)     
     bm = BinanceSocketManager(client)
-    
+    get_stream_data(bm)
     investimento = 15
     leverage = 1
     minimo_guadagno_assoluto = 1
     percentuale_minimo_guadagno = 0.002     
     open_orders = []
-    my_symbols = ['ETH','BTC']  
     numero_massimo_ordini = 2
+    my_symbols = ['ETH','BTC']  
 
     for symbol in my_symbols:
-        async with bm.kline_socket(symbol=symbol+'USDT') as stream:
-            while True:
-                res = await stream.recv()
-                print('symbol: ',res['s'],' date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
-                
+        print(symbol)
+
                 # guadagno_assoluto = abs(usdtheter-usdbinance) * investimento * leverage
                 # guadagno_percentuale = guadagno_assoluto/investimento
                 

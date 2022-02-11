@@ -1,5 +1,12 @@
-# GreenRock
-### Trading arbitrage bot in the Binance exchange 
+# Moonboot: let's arbitrage on Binance 
+
+## RUN
+```bash
+source venv/bin/activate
+export binance_api="your api key"
+export binance_secret="your api secret"
+python3 bot.py
+```
 
 # COSTI
 swap 10 centesimi
@@ -18,26 +25,13 @@ swap 10 centesimi
 APIError(code=-1013): Filter failure: MIN_NOTIONAL
 
 ## INSTALLAZIONE
-Devi avere python3 per continuare 
-
-1. Upgrade pip
-```python 
+```bash
+python3 -m venv venv 
+source venv/bin/activate
 python3 -m pip install --upgrade pip 
-```
-
-2. Install python-binance
-```python 
 python3 -m pip install --upgrade python-binance
-
-```
-
-3. export api secrets in the shell eviroement 
-```python 
 export binance_api="your api key"
 export binance_secret="your api secret"
 ```
 
-## LANCIA IL BOT
-```python
-python3 bot.py
-```
+

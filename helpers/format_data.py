@@ -19,3 +19,5 @@ async def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',directi
 def timestamp_to_datetime(time):
     time=str(time)
     return(datetime.fromtimestamp(int(time[:-3])).strftime('%d-%m-%Y %H:%M:%S'))
+
+timestamp_to_datetime('1644599819999')
