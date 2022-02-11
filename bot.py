@@ -19,9 +19,8 @@ import http
 import asyncio
 import time
 import datetime
-
-from binance.enums import *
 from binance import AsyncClient, BinanceSocketManager
+#from binance.enums import *
 
 async def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',direction = floor):
     URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
@@ -60,29 +59,30 @@ async def test_stream_data(client):
             res = await stream.recv()
             print('date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
 
-async def get_stream_data(binanceSocketManager):
-    async with binanceSocketManager.kline_socket(symbol=symbol+'USDT') as stream:
-        while True:
-            res = await stream.recv()
-            print('symbol: ',res['s'],' date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
-            
+async def get_stream_data(binanceSocketManager,token):
+    while True:
+        res = await binanceSocketManager.kline_socket(symbol=token+'USDT').recv()
+        print('symbol: ',res['s'],' date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
+        
 
 async def main():    
     api_key = os.environ.get('binance_api')
     api_secret = os.environ.get('binance_secret')
     client = await AsyncClient.create(api_key, api_secret)     
     bm = BinanceSocketManager(client)
-    get_stream_data(bm)
-    investimento = 15
-    leverage = 1
-    minimo_guadagno_assoluto = 1
-    percentuale_minimo_guadagno = 0.002     
-    open_orders = []
-    numero_massimo_ordini = 2
-    my_symbols = ['ETH','BTC']  
+    response = await get_stream_data(bm,token='BNB')
+    data = await response.json()
+    print(data)
+    # investimento = 15
+    # leverage = 1
+    # minimo_guadagno_assoluto = 1
+    # percentuale_minimo_guadagno = 0.002     
+    # open_orders = []
+    # numero_massimo_ordini = 2
+    # my_symbols = ['ETH','BTC']  
 
-    for symbol in my_symbols:
-        print(symbol)
+    # for symbol in my_symbols:
+    #     print(symbol)
 
                 # guadagno_assoluto = abs(usdtheter-usdbinance) * investimento * leverage
                 # guadagno_percentuale = guadagno_assoluto/investimento
