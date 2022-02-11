@@ -22,9 +22,6 @@ import time
 from binance.enums import *
 from binance import AsyncClient, BinanceSocketManager
 
-
-from format_data import timestamp_to_datetime, format_coin_quantity
-
 async def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',direction = floor):
     URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
     result = await requests.get(URL).json()
