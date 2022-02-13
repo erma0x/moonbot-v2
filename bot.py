@@ -37,19 +37,23 @@ async def get_data(client,token_pair='BNBUSDT'):
     bm = BinanceSocketManager(client)
     async with bm.kline_socket(symbol=token_pair) as stream:        
         res = await stream.recv()
+        print('date: ',timestamp_to_date(res['k']['T']))
         #print('date: ',timestamp_to_date(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
         return(res['k']['c']) 
 
 async def main():
+    open_BUY_orders = []
+    open_SELL_orders = []
+
     api_key = os.environ.get('binance_api') 
     api_secret = os.environ.get('binance_secret')
     client = await AsyncClient.create(api_key, api_secret)
-    my_symbols = ['ETH','BTC'] 
+
     investimento=2000
     leverage=2
     minimo_guadagno_assoluto = 1
-    percentuale_minimo_guadagno = 0.002
-    open_orders = []
+    minimo_guadagno_percentuale = 0.002
+
     numero_massimo_ordini = 2
     symbol = 'AAVE'
 
@@ -59,105 +63,120 @@ async def main():
         priceUSDT = float(dataUSDT)
         priceBUSD = float(dataBUSD)
         #print(symbol+'USDT : ',priceUSDT,'\t',symbol+'BUSD : ',priceBUSD)
-        coin_quantity = investimento/min(priceUSDT,priceBUSD)
-        guadagno_assoluto = (max(priceUSDT,priceBUSD)/min(priceUSDT,priceBUSD) * investimento - investimento) * leverage
-        guadagno_percentuale = guadagno_assoluto/investimento*100
+        lower_price_stablecoin = min(priceUSDT,priceBUSD)
+        coin_quantity = investimento/lower_price_stablecoin
+        guadagno_assoluto_stimato = (max(priceUSDT,priceBUSD)/lower_price_stablecoin * investimento - investimento) * leverage
+        guadagno_percentuale_stimato = guadagno_assoluto_stimato/investimento*100
         #print('guadagno stimato $ ',guadagno_assoluto)
-        if guadagno_percentuale>0.05:
-            if min(priceUSDT,priceBUSD) == priceUSDT:
-                stablecoin='USDT'
-                
-            else:
-                stablecoin='BUSD'
-            testo = ''' \n\n
-                    Moonbot 🌝 Open Operation  \n
-                    COMPRA una quantita di \t {0}
-                    guadagno assoluto stimato in   {1}  \t {2}
-                    guadagno precentuale stimato \t  % {3} \n\n
-            '''.format(coin_quantity,stablecoin,guadagno_assoluto,guadagno_percentuale)
-            print(testo)
+        if guadagno_percentuale_stimato>=minimo_guadagno_percentuale and numero_massimo_ordini>len(open_BUY_orders):
+            if min(priceUSDT,priceBUSD) == priceUSDT:stablecoin='USDT'
+            if min(priceUSDT,priceBUSD) == priceUSDT:stablecoin='BUSD'
 
+            order = await client.order_limit_buy(timeInForce='GTC',
+                                symbol = symbol+stablecoin,
+                                quantity = format_coin_quantity(coin_quantity),
+                                price = round(float(lower_price_stablecoin),4)) # round 2, or 4
+                
+            testo ="""
+SEGNALE DI ENTRATA 
+APRO L'ORDINE DI ACQUISTO DEL TOKEN
+    order ID        \t{0} 
+    symbol \t\t       {1}
+    transaction time\t{2}
+    client order ID \t{3}
+    executed quantity\t{4}
+
+    guadagno assoluto stimato $ \t{5}
+    guadagno percentuale stimato % \t{6}
+
+            """.format(order['orderId'],
+            order['symbol'],
+            timestamp_to_date(order['transactTime']),
+            order['clientOrderId'],
+            order['executedQty'],
+            guadagno_assoluto_stimato,
+            guadagno_percentuale_stimato)
+            print(testo)
+            prezzo_di_apertura = order['price']
+            open_BUY_orders.append(order)
+
+        if len(open_BUY_orders)>0:
+            if max(priceUSDT,priceBUSD) == priceUSDT:sell_stablecoin='USDT' 
+            if max(priceUSDT,priceBUSD) == priceUSDT:sell_stablecoin='BUSD'
+            for i in range(len(open_BUY_orders)):
+                my_order = open_BUY_orders[i]
+                if my_order['executedQty'] == my_order['origQty'] and len(open_BUY_orders) < numero_massimo_ordini:
+                    order = await client.order_limit_sell(timeInForce='GTC',
+                        symbol = symbol+sell_stablecoin,
+                        quantity = my_order['executedQty'],
+                        price = round(float(lower_price_stablecoin),4))
+
+                    testo ="""
+ORDINE DI ACQUISTO DEL TOKEN RIUSCITO
+APRO L'ORDINE DI VENDITA DEL TOKEN
+
+    order ID        \t{0} 
+    symbol \t\t       {1}
+    transaction time\t{2}
+    client order ID \t{3}
+    executed quantity\t{4}
+
+    guadagno assoluto stimato $ \t{5}
+    guadagno percentuale stimato % \t{6}
+                            """.format(my_order['orderId'],
+                            my_order['symbol'],
+                            timestamp_to_date(my_order['transactTime']),
+                            my_order['clientOrderId'],
+                            my_order['executedQty'],
+                            guadagno_assoluto_stimato,
+                            guadagno_percentuale_stimato)
+                    print(testo)
+                    open_SELL_orders.append(order)
+                    open_BUY_orders[i].remove()
+
+        if len(open_SELL_orders)>0:
+            for i in range(len(open_SELL_orders)):
+                my_order = open_SELL_orders[i]
+                if my_order['executedQty'] == my_order['origQty']:
+                    
+                    guadagno_assoluto_effettivo = float(my_order['executedQty'])*(float(my_order['price'])-float(prezzo_di_apertura))
+                    guadagno_percentuale_effettivo = guadagno_assoluto_effettivo/investimento*100
+
+                    testo="""
+VENDITA DEL TOKEN RIUSCITA
+CALCOLO GUADAGNO EFFETTIVO
+
+    order ID        \t{0} 
+    symbol \t\t       {1}
+    transaction time\t{2}
+    client order ID \t{3}
+    executed quantity\t{4}
+
+    guadagno assoluto stimato $ \t{5}
+    guadagno percentuale stimato % \t{6}
+    
+    guadagno assoluto effettivo $\t {7}
+    guadagno percentuale effettivo %\t {8}
+                            """.format(my_order['orderId'],
+                            my_order['symbol'],
+                            timestamp_to_date(my_order['transactTime']),
+                            my_order['clientOrderId'],
+                            my_order['executedQty'],
+                            guadagno_assoluto_stimato,
+                            guadagno_percentuale_stimato,
+                            guadagno_assoluto_effettivo,
+                            guadagno_percentuale_effettivo)
+                    print(testo)
+                    open_SELL_orders[i].remove()
+"""
+order object example
+{'symbol': 'ETHBUSD', 'orderId': 7760933105, 'orderListId': -1, 
+'clientOrderId': 'RKPcQ9jAOT8LlUYK3xygGB', 'transactTime': 1644342622758, 
+'price': '3040.28000000', 'origQty': '0.00490000', 'executedQty': '0.00000000', 
+'cummulativeQuoteQty': '0.00000000', 'status': 'NEW', 'timeInForce': 'GTC',
+ 'type': 'LIMIT', 'side': 'BUY', 'fills': []}
+"""
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
-
-# async def main():    
-#     api_key = os.environ.get('binance_api')
-#     api_secret = os.environ.get('binance_secret')
-#     client = await AsyncClient.create(api_key, api_secret)     
-#     bm = BinanceSocketManager(client)
-#     token='BTC'
-#     while True:
-#         res = await bm.kline_socket(symbol=token+'USDT').recv()
-#         print('symbol: ',res['s'],' date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
-        
-    # investimento = 15
-    # leverage = 1
-    # minimo_guadagno_assoluto = 1
-    # percentuale_minimo_guadagno = 0.002     
-    # open_orders = []
-    # numero_massimo_ordini = 2
-    # my_symbols = ['ETH','BTC']  
-
-    # for symbol in my_symbols:
-    #     print(symbol)
-
-                # guadagno_assoluto = abs(usdtheter-usdbinance) * investimento * leverage
-                # guadagno_percentuale = guadagno_assoluto/investimento
-                
-                # print('date: ',timestamp_to_datetime(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
-
-                # print('-'*80+'\nsimbolo: ',symbol)
-                # print('\nPREZZO in Theter \tUSDT \t: ',usdtheter['price'],'\nprezzo in binance USD\tBUSD \t: ',usdbinance['price'])
-                # print('\nguadagno ASSOLUTO\t: ',round(guadagno_assoluto,5),'$')
-                # print('\nguadagno PERCENTUALE\t: ',round(guadagno_percentuale,7),'%\n')
-
-                # busd_info = client.get_symbol_info(symbol+'USDT')
-                # usdt_info = client.get_symbol_info(symbol+'BUSD')
-                # busd_min_quantity = busd_info['filters'][2]['minQty']
-                # usdt_min_quantity = usdt_info['filters'][2]['minQty']
-                
-                # print('QUANTITA MINIME ', busd_min_quantity,usdt_min_quantity)
-        
-                # if len(open_orders) < numero_massimo_ordini:
-                #     if float(guadagno_percentuale) >= percentuale_minimo_guadagno:
-                #         print('\n**** APRO OPERAZIONE ****\n')
-
-                #         if usdtheter['price'] > usdbinance['price']:
-                #             print('eseguo operazione con BUSD')
-                #             coin_quantity = investimento/float(usdbinance['price'])
-                #             order = client.order_limit_buy(timeInForce='GTC',
-                #                 symbol = symbol+'BUSD',
-                #                 quantity = format_coin_quantity(coin_quantity),
-                #                 price = round(float(usdbinance['price']),2))
-
-                #         if usdtheter['price'] < usdbinance['price']:
-                #             print('eseguo operazione con USDT')
-                #             coin_quantity = investimento/float(usdtheter['price'])
-                #             order = client.order_limit_buy(timeInForce='GTC',
-                #                 symbol=i+'USDT',
-                #                 quantity = format_coin_quantity(coin_quantity),
-                #                 price=round(float(usdtheter['price']),2))
-
-                #         open_orders.append(order)
-                
-                #     if my_order['executedQty'] == my_order['origQty']: # SE GLI ORDINI SONO STATI FILLATI 
-                #         if 'USDT' in my_order['symbol'] :
-                #             coin_quantity = investimento/float(usdtheter['price'])
-                #             order = client.order_limit_sell(timeInForce='GTC',
-                #                 symbol=i+'BUSD',
-                #                 quantity = format_coin_quantity(coin_quantity),
-                #                 price=round(float(usdbinance['price']),2))
-
-                #         if 'BUSD' in my_order['symbol'] :
-                #             coin_quantity = investimento/float(usdtheter['price'])
-                #             order = client.order_limit_sell(timeInForce='GTC',
-                #                 symbol=symbol+'USDT',
-                #                 quantity = format_coin_quantity(coin_quantity),
-                #                 price=round(float(usdtheter['price']),2))
-
-
-# if __name__ == "__main__":
-#     loop = asyncio.get_event_loop()
-#     loop.run_until_complete(main())
