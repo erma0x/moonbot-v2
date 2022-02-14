@@ -120,8 +120,8 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
                 sell_stablecoin='BUSD'
 
             for i in range(len(open_BUY_orders)):
-                print(my_order)
                 my_order = open_BUY_orders[i]
+                print(my_order)
                 print(" DEBUGGURE QUI")
                 if my_order['executedQty'] == my_order['origQty']: ####################
                     order = await client.order_limit_sell(timeInForce='GTC',
