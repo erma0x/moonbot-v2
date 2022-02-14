@@ -128,11 +128,11 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
             open_BUY_orders.append(order)
 ##########################################################################
         if len(open_BUY_orders)>0:
-            if max(priceUSDT,priceBUSD) == priceUSDT:
-                sell_stablecoin='USDT' 
+            if priceUSDT < priceBUSD:
+                stablecoin='BUSD'
 
-            if max(priceUSDT,priceBUSD) == priceBUSD:
-                sell_stablecoin='BUSD'
+            if priceUSDT > priceBUSD:
+                stablecoin='USDT'
 
             for i in range(len(open_BUY_orders)):
                 my_order = open_BUY_orders[i]
@@ -146,11 +146,11 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
                     priceBUSD = float(dataBUSD)
 
                     order = await client.create_order(
-                        symbol=symbol+stablecoin,
+                        symbol=symbol+sell_stablecoin,
                         side=client.SIDE_SELL,
                         type=client.ORDER_TYPE_MARKET,
                         #timeInForce='60',
-                    quantity=await format_coin_quantity(coin_quantity, symbol = symbol+stablecoin))#,
+                    quantity=await format_coin_quantity(coin_quantity, symbol = symbol+sell_stablecoin))#,
                         #price=round(max(priceBUSD,priceUSDT),4))
 
                     # order = await client.order_limit_sell(timeInForce='GTC',
