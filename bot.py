@@ -95,7 +95,7 @@ async def main():
                     side=client.SIDE_BUY,
                     type=client.ORDER_TYPE_MARKET,
                     #timeInForce='60',
-                    quantity= await format_coin_quantity(coin_quantity, symbol = symbol+stablecoin))#,
+                    quantity= await format_coin_quantity(coin_quantity, symbol = symbol+"USDT"))######################
                     #price=round(float(lower_price_stablecoin),4))
 
 
