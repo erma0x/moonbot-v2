@@ -78,8 +78,11 @@ async def main():
         #print('guadagno stimato $ ',guadagno_assoluto)
         
         if guadagno_percentuale_stimato >= minimo_guadagno_percentuale and numero_massimo_ordini>len(open_BUY_orders):
-            if min(priceUSDT,priceBUSD) == priceUSDT:stablecoin='USDT'
-            if min(priceUSDT,priceBUSD) == priceUSDT:stablecoin='BUSD'
+            if min(priceUSDT,priceBUSD) == priceUSDT:
+                stablecoin='USDT'
+                
+            if min(priceUSDT,priceBUSD) == priceUSDT:
+                stablecoin='BUSD'
 
             order = await client.order_limit_buy(timeInForce='GTC',
                                 symbol = symbol+stablecoin,
