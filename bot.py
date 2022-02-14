@@ -13,6 +13,8 @@ from datetime import datetime
 from math import floor
 #from binance.enums import *
 from binance import AsyncClient, BinanceSocketManager
+from binance.enums import *
+
 
 async def format_coin_quantity(initial_coin_quantity, symbol = 'ETHUSDT',direction = floor):
     URL = "https://www.binance.com/api/v3/exchangeInfo?symbols=[%22" + str(symbol) + "%22]"
@@ -61,6 +63,9 @@ async def main():
 
     minimo_guadagno_assoluto = 1 # $
     minimo_guadagno_percentuale = 0.02 # %[0,100]
+    
+    
+
 
     numero_massimo_ordini = 1
     symbol = 'ETH'
@@ -84,10 +89,20 @@ async def main():
             if priceUSDT < priceBUSD:
                 stablecoin='USDT'
 
-            order = await client.order_limit_buy(timeInForce='GTC',
-                                symbol = symbol+stablecoin,
-                                quantity = await format_coin_quantity(coin_quantity),
-                                price = round(float(lower_price_stablecoin),4)) # round 2, or 4
+
+            order = await client.create_order(
+                    symbol=symbol+stablecoin,
+                    side=client.SIDE_BUY,
+                    type=client.ORDER_TYPE_MARKET,
+                    #timeInForce='60',
+                    quantity=coin_quantity,
+                    price=round(float(lower_price_stablecoin),4))
+
+
+            # order = await client.order_limit_buy(timeInForce='GTC',
+            #                     symbol = symbol+stablecoin,
+            #                     quantity = await format_coin_quantity(coin_quantity),
+            #                     price = round(float(lower_price_stablecoin),4)) # round 2, or 4
                 
             testo ="""
 SEGNALE DI ENTRATA 
@@ -124,10 +139,24 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
                 print(my_order)
                 print(" DEBUGGURE QUI")
                 if my_order['status']=='FILLED': ####################
-                    order = await client.order_limit_sell(timeInForce='GTC',
-                        symbol = symbol+sell_stablecoin,
-                        quantity = my_order['origQty'],
-                        price = round(max(priceUSDT,priceBUSD),4))
+
+                    dataUSDT = await get_data(client,token_pair=symbol+'BUSD')
+                    dataBUSD = await get_data(client,token_pair=symbol+'USDT')
+                    priceUSDT = float(dataUSDT)
+                    priceBUSD = float(dataBUSD)
+
+                    order = await client.create_order(
+                        symbol=symbol+stablecoin,
+                        side=client.SIDE_SELL,
+                        type=client.ORDER_TYPE_MARKET,
+                        #timeInForce='60',
+                        quantity=coin_quantity,
+                        price=round(max(priceBUSD,priceUSDT),4))
+
+                    # order = await client.order_limit_sell(timeInForce='GTC',
+                    #     symbol = symbol+sell_stablecoin,
+                    #     quantity = my_order['origQty'],
+                    #     price = round(max(priceUSDT,priceBUSD),4))
 
                     testo ="""
 ORDINE DI ACQUISTO DEL TOKEN RIUSCITO
@@ -155,6 +184,8 @@ APRO L'ORDINE DI VENDITA DEL TOKEN
         if len(open_SELL_orders)>0:
             for i in range(len(open_SELL_orders)):
                 my_order = open_SELL_orders[i]
+                
+                
                 if my_order['status']=='FILLED':
                     
                     guadagno_assoluto_effettivo = float(my_order['origQty'])*(float(my_order['price'])-float(prezzo_di_apertura))
