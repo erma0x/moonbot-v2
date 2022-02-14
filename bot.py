@@ -72,7 +72,7 @@ async def main():
         priceBUSD = float(dataBUSD)
         #print(symbol+'USDT : ',priceUSDT,'\t',symbol+'BUSD : ',priceBUSD)
         lower_price_stablecoin = min(priceUSDT,priceBUSD)
-        coin_quantity = lower_price_stablecoin/investimento
+        coin_quantity = investimento/lower_price_stablecoin
         guadagno_assoluto_stimato = investimento/min(priceUSDT,priceBUSD)*max(priceUSDT,priceBUSD) - investimento
         guadagno_percentuale_stimato = guadagno_assoluto_stimato/investimento*100
         #print('guadagno stimato $ ',guadagno_assoluto)
