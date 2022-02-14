@@ -95,7 +95,7 @@ async def main():
                     side=client.SIDE_BUY,
                     type=client.ORDER_TYPE_MARKET,
                     #timeInForce='60',
-                    quantity=coin_quantity)#,
+                    quantity=format_coin_quantity(coin_quantity, symbol = symbol+stablecoin)#,
                     #price=round(float(lower_price_stablecoin),4))
 
 
@@ -150,7 +150,7 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
                         side=client.SIDE_SELL,
                         type=client.ORDER_TYPE_MARKET,
                         #timeInForce='60',
-                        quantity=coin_quantity)
+                    quantity=format_coin_quantity(coin_quantity, symbol = symbol+stablecoin)#,
                         #price=round(max(priceBUSD,priceUSDT),4))
 
                     # order = await client.order_limit_sell(timeInForce='GTC',
