@@ -111,7 +111,7 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
             print(testo)
             prezzo_di_apertura = order['price']
             open_BUY_orders.append(order)
-
+##########################################################################
         if len(open_BUY_orders)>0:
             if max(priceUSDT,priceBUSD) == priceUSDT:
                 sell_stablecoin='USDT' 
@@ -123,7 +123,7 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
                 my_order = open_BUY_orders[i]
                 print(my_order)
                 print(" DEBUGGURE QUI")
-                if my_order['executedQty'] == my_order['origQty']: ####################
+                if my_order['status']=='FILLED': ####################
                     order = await client.order_limit_sell(timeInForce='GTC',
                         symbol = symbol+sell_stablecoin,
                         quantity = my_order['executedQty'],
@@ -155,7 +155,7 @@ APRO L'ORDINE DI VENDITA DEL TOKEN
         if len(open_SELL_orders)>0:
             for i in range(len(open_SELL_orders)):
                 my_order = open_SELL_orders[i]
-                if my_order['executedQty'] == my_order['origQty']:
+                if my_order['status']=='FILLED':
                     
                     guadagno_assoluto_effettivo = float(my_order['executedQty'])*(float(my_order['price'])-float(prezzo_di_apertura))
                     guadagno_percentuale_effettivo = guadagno_assoluto_effettivo/investimento*100
