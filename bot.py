@@ -42,6 +42,14 @@ async def get_data(client,token_pair='BNBUSDT'):
         return(res['k']['c']) 
 
 async def main():
+    """
+    order object example
+    {'symbol': 'ETHBUSD', 'orderId': 7760933105, 'orderListId': -1, 
+    'clientOrderId': 'RKPcQ9jAOT8LlUYK3xygGB', 'transactTime': 1644342622758, 
+    'price': '3040.28000000', 'origQty': '0.00490000', 'executedQty': '0.00000000', 
+    'cummulativeQuoteQty': '0.00000000', 'status': 'NEW', 'timeInForce': 'GTC',
+    'type': 'LIMIT', 'side': 'BUY', 'fills': []}
+    """
     open_BUY_orders = []
     open_SELL_orders = []
 
@@ -49,13 +57,13 @@ async def main():
     api_secret = os.environ.get('binance_secret')
     client = await AsyncClient.create(api_key, api_secret)
 
-    investimento=2000
-    leverage=2
-    minimo_guadagno_assoluto = 1
-    minimo_guadagno_percentuale = 0.002
+    investimento = 20 # $
 
-    numero_massimo_ordini = 2
-    symbol = 'AAVE'
+    minimo_guadagno_assoluto = 1 # $
+    minimo_guadagno_percentuale = 0.002 # [0,1]
+
+    numero_massimo_ordini = 1
+    symbol = 'ETH'
 
     while True:
         dataUSDT = await get_data(client,token_pair=symbol+'BUSD')
@@ -64,11 +72,12 @@ async def main():
         priceBUSD = float(dataBUSD)
         #print(symbol+'USDT : ',priceUSDT,'\t',symbol+'BUSD : ',priceBUSD)
         lower_price_stablecoin = min(priceUSDT,priceBUSD)
-        coin_quantity = investimento/lower_price_stablecoin
-        guadagno_assoluto_stimato = (max(priceUSDT,priceBUSD)/lower_price_stablecoin * investimento - investimento) * leverage
+        coin_quantity = lower_price_stablecoin/investimento
+        guadagno_assoluto_stimato = investimento/min(priceUSDT,priceBUSD)*max(priceUSDT,priceBUSD) - investimento
         guadagno_percentuale_stimato = guadagno_assoluto_stimato/investimento*100
         #print('guadagno stimato $ ',guadagno_assoluto)
-        if guadagno_percentuale_stimato>=minimo_guadagno_percentuale and numero_massimo_ordini>len(open_BUY_orders):
+        
+        if guadagno_percentuale_stimato >= minimo_guadagno_percentuale and numero_massimo_ordini>len(open_BUY_orders):
             if min(priceUSDT,priceBUSD) == priceUSDT:stablecoin='USDT'
             if min(priceUSDT,priceBUSD) == priceUSDT:stablecoin='BUSD'
 
@@ -101,15 +110,19 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
             open_BUY_orders.append(order)
 
         if len(open_BUY_orders)>0:
-            if max(priceUSDT,priceBUSD) == priceUSDT:sell_stablecoin='USDT' 
-            if max(priceUSDT,priceBUSD) == priceUSDT:sell_stablecoin='BUSD'
+            if max(priceUSDT,priceBUSD) == priceUSDT:
+                sell_stablecoin='USDT' 
+
+            if max(priceUSDT,priceBUSD) == priceBUSD:
+                sell_stablecoin='BUSD'
+
             for i in range(len(open_BUY_orders)):
                 my_order = open_BUY_orders[i]
-                if my_order['executedQty'] == my_order['origQty'] and len(open_BUY_orders) < numero_massimo_ordini:
+                if my_order['executedQty'] == my_order['origQty']:
                     order = await client.order_limit_sell(timeInForce='GTC',
                         symbol = symbol+sell_stablecoin,
                         quantity = my_order['executedQty'],
-                        price = round(float(lower_price_stablecoin),4))
+                        price = round(max(priceUSDT,priceBUSD),4))
 
                     testo ="""
 ORDINE DI ACQUISTO DEL TOKEN RIUSCITO
@@ -132,7 +145,7 @@ APRO L'ORDINE DI VENDITA DEL TOKEN
                             guadagno_percentuale_stimato)
                     print(testo)
                     open_SELL_orders.append(order)
-                    open_BUY_orders[i].remove()
+                    open_BUY_orders.remove(open_BUY_orders[i])
 
         if len(open_SELL_orders)>0:
             for i in range(len(open_SELL_orders)):
@@ -167,15 +180,9 @@ CALCOLO GUADAGNO EFFETTIVO
                             guadagno_assoluto_effettivo,
                             guadagno_percentuale_effettivo)
                     print(testo)
-                    open_SELL_orders[i].remove()
-"""
-order object example
-{'symbol': 'ETHBUSD', 'orderId': 7760933105, 'orderListId': -1, 
-'clientOrderId': 'RKPcQ9jAOT8LlUYK3xygGB', 'transactTime': 1644342622758, 
-'price': '3040.28000000', 'origQty': '0.00490000', 'executedQty': '0.00000000', 
-'cummulativeQuoteQty': '0.00000000', 'status': 'NEW', 'timeInForce': 'GTC',
- 'type': 'LIMIT', 'side': 'BUY', 'fills': []}
-"""
+                    print(' ',open_SELL_orders[i])
+                    open_SELL_orders.remove(open_SELL_orders[i])
+
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
