@@ -126,13 +126,13 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
             print(testo)
             prezzo_di_apertura = order['price']
             open_BUY_orders.append(order)
-##########################################################################
+####################### SELL  ###################################################
         if len(open_BUY_orders)>0:
             if priceUSDT < priceBUSD:
-                stablecoin='BUSD'
+                sell_stablecoin='BUSD'
 
             if priceUSDT > priceBUSD:
-                stablecoin='USDT'
+                sell_stablecoin='USDT'
 
             for i in range(len(open_BUY_orders)):
                 my_order = open_BUY_orders[i]
