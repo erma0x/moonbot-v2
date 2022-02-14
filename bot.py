@@ -39,8 +39,8 @@ async def get_data(client,token_pair='BNBUSDT'):
     bm = BinanceSocketManager(client)
     async with bm.kline_socket(symbol=token_pair) as stream:        
         res = await stream.recv()
-        print('date: ',timestamp_to_date(res['k']['T']))
-        #print('date: ',timestamp_to_date(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
+        #print('date: ',timestamp_to_date(res['k']['T']))
+        print('price: ',token_pair,'  date: ',timestamp_to_date(res['k']['T']), ' closing price: ',res['k']['c'] , ' volume: ',res['k']['V'])
         return(res['k']['c']) 
 
 async def main():
