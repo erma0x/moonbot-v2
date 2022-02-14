@@ -96,7 +96,7 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
     symbol \t\t       {1}
     transaction time\t{2}
     client order ID \t{3}
-    executed quantity\t{4}
+    original quantity\t{4}
 
     guadagno assoluto stimato $ \t{5}
     guadagno percentuale stimato % \t{6}
@@ -105,7 +105,7 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
             order['symbol'],
             timestamp_to_date(order['transactTime']),
             order['clientOrderId'],
-            order['executedQty'],
+            order['origQty'],
             guadagno_assoluto_stimato,
             guadagno_percentuale_stimato)
             print(testo)
@@ -120,8 +120,10 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
                 sell_stablecoin='BUSD'
 
             for i in range(len(open_BUY_orders)):
+                print(my_order)
                 my_order = open_BUY_orders[i]
-                if my_order['executedQty'] == my_order['origQty']:
+                print(" DEBUGGURE QUI")
+                if my_order['executedQty'] == my_order['origQty']: ####################
                     order = await client.order_limit_sell(timeInForce='GTC',
                         symbol = symbol+sell_stablecoin,
                         quantity = my_order['executedQty'],
