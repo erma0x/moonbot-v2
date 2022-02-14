@@ -126,7 +126,7 @@ APRO L'ORDINE DI ACQUISTO DEL TOKEN
                 if my_order['status']=='FILLED': ####################
                     order = await client.order_limit_sell(timeInForce='GTC',
                         symbol = symbol+sell_stablecoin,
-                        quantity = my_order['executedQty'],
+                        quantity = my_order['origQty'],
                         price = round(max(priceUSDT,priceBUSD),4))
 
                     testo ="""
@@ -145,7 +145,7 @@ APRO L'ORDINE DI VENDITA DEL TOKEN
                             my_order['symbol'],
                             timestamp_to_date(my_order['transactTime']),
                             my_order['clientOrderId'],
-                            my_order['executedQty'],
+                            my_order['origQty'],
                             guadagno_assoluto_stimato,
                             guadagno_percentuale_stimato)
                     print(testo)
@@ -157,7 +157,7 @@ APRO L'ORDINE DI VENDITA DEL TOKEN
                 my_order = open_SELL_orders[i]
                 if my_order['status']=='FILLED':
                     
-                    guadagno_assoluto_effettivo = float(my_order['executedQty'])*(float(my_order['price'])-float(prezzo_di_apertura))
+                    guadagno_assoluto_effettivo = float(my_order['origQty'])*(float(my_order['price'])-float(prezzo_di_apertura))
                     guadagno_percentuale_effettivo = guadagno_assoluto_effettivo/investimento*100
 
                     testo="""
@@ -179,7 +179,7 @@ CALCOLO GUADAGNO EFFETTIVO
                             my_order['symbol'],
                             timestamp_to_date(my_order['transactTime']),
                             my_order['clientOrderId'],
-                            my_order['executedQty'],
+                            my_order['origQty'],
                             guadagno_assoluto_stimato,
                             guadagno_percentuale_stimato,
                             guadagno_assoluto_effettivo,
