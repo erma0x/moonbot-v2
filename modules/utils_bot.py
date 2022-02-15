@@ -8,7 +8,8 @@ async def format_coin_quantity(qnt,symbol):
     return formatted_quantity
 
 def timestamp_to_date(time):
-    return(datetime.fromtimestamp(int(str( time[:-3]) )).strftime('%d-%m-%Y %H:%M:%S'))
+    time = str(time)
+    return(datetime.fromtimestamp(int(time[:-3])).strftime('%d-%m-%Y %H:%M:%S'))
 
 async def get_data(client,token_pair='BNBUSDT'): ############### NON KLINE MA PREZZO SINGOLO
     bm = BinanceSocketManager(client)
