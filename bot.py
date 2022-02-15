@@ -5,13 +5,15 @@ in the shell
 export binance_api="your_api_key_here"
 export binance_secret="your_api_secret_here"
 """
+import imp
 import os
 import asyncio
 from binance.enums import *
 from binance import AsyncClient
-
+from copy import deepcopy
 from modules.utils_bot import *
-                    
+import time
+
 async def main():
     """
     guadagno_assoluto_effettivo = float(SELL_open_orders[i]['origQty'])*(float(SELL_open_orders[i]['price'])-float(prezzo_di_apertura))
@@ -27,7 +29,7 @@ async def main():
     minimo_guadagno_percentuale = 0.09 # %[0,100]
     
     numero_massimo_ordini = 1
-    my_symbol = 'BNB'
+    my_symbol = 'QI'
 
     BUY_open_orders = []
     SELL_open_orders = []
@@ -51,36 +53,45 @@ async def main():
             if priceUSDT < priceBUSD:
                 buy_stablecoin='USDT'
 
+            buy_symbol = my_symbol+buy_stablecoin 
             order = await client.create_order(
-                    symbol=my_symbol+buy_stablecoin,
+                    symbol=buy_symbol,
                     side=client.SIDE_BUY,
                     type=client.ORDER_TYPE_MARKET,
-                    quantity = await format_coin_quantity(coin_quantity, symbol = my_symbol+buy_stablecoin))
+                    quantity = await format_coin_quantity(coin_quantity, symbol = buy_symbol))
 
             print_OPEN(order)
             BUY_open_orders.append(order)
 
 # SELL TOKEN 
+        time.sleep(1)
         if len(BUY_open_orders)>0:
-            priceUSDT = await get_data(client,token_pair=my_symbol+'USDT')
-            priceBUSD = await get_data(client,token_pair=my_symbol+'BUSD')
-            print(my_symbol+'USDT ',priceUSDT,'\t|\t',my_symbol+'BUSD : ',priceBUSD)
+            sell_priceUSDT = await get_data(client,token_pair=my_symbol+'USDT')
+            sell_priceBUSD = await get_data(client,token_pair=my_symbol+'BUSD')
+            print('SELLING : ',my_symbol+'USDT ',sell_priceUSDT,'\t|\t',my_symbol+'BUSD : ',sell_priceBUSD)
         
-            if priceUSDT < priceBUSD:
+            if sell_priceUSDT < sell_priceBUSD:
                 sell_stablecoin='BUSD'
 
-            if priceUSDT > priceBUSD:
+            if sell_priceUSDT > sell_priceBUSD:
                 sell_stablecoin='USDT'
 
             for i in range(len(BUY_open_orders)):
-                if BUY_open_orders[i]['status']=='FILLED': 
-                    order = await client.create_order(
-                        symbol=my_symbol+sell_stablecoin,
-                        side=client.SIDE_SELL,
-                        type=client.ORDER_TYPE_MARKET,
-                        quantity=await format_coin_quantity(coin_quantity, symbol = my_symbol+sell_stablecoin))
-
+                if BUY_open_orders[i]['status']=='FILLED':
                     
+                    sell_symbol = deepcopy(my_symbol+sell_stablecoin)
+                    # order = await client.create_sell_limit(
+                    #     symbol=sell_symbol,
+                    #     side=client.SIDE_SELL,
+                    #     type=client.ORDER_TYPE_MARKET,
+                    #     quantity=await format_coin_quantity(coin_quantity, symbol = my_symbol+sell_stablecoin))
+
+                    order = await client.order_limit_sell(timeInForce='GTC',
+                                        symbol = sell_symbol,
+                                        quantity = await format_coin_quantity(coin_quantity),
+                                        price = round(float(max(sell_priceUSDT,sell_priceBUSD)),4)) # round 2, or 4
+
+
                     print_OPEN(order)
                     print_FILLED(order)
 
