@@ -1,5 +1,5 @@
 from datetime import datetime
-from binance.helpers import round_step_size #, get_step_size
+from binance.helpers import round_step_size, get_step_size
 from binance import  BinanceSocketManager
 
 async def format_coin_quantity(qnt,symbol):
