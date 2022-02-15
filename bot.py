@@ -64,7 +64,8 @@ async def main():
         if len(BUY_open_orders)>0:
             priceUSDT = await get_data(client,token_pair=my_symbol+'USDT')
             priceBUSD = await get_data(client,token_pair=my_symbol+'BUSD')
-            
+            print(my_symbol+'USDT ',priceUSDT,'\t|\t',my_symbol+'BUSD : ',priceBUSD)
+        
             if priceUSDT < priceBUSD:
                 sell_stablecoin='BUSD'
 
