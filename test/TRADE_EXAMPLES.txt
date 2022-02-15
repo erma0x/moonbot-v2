@@ -1,0 +1,16 @@
+{'symbol': 'ETHBUSD', 'orderId': 4124964968, 'orderListId': -1, 'clientOrderId': 'yLBKqlMWaOfFrwisvsIj3C', 
+'transactTime': 1644865759011, 'price': '0.00000000',
+ 'origQty': '0.00510000', 'executedQty': '0.00510000', 
+ 'cummulativeQuoteQty': '14.73298200', 'status': 'FILLED',
+  'timeInForce': 'GTC', 'type': 'MARKET', 'side': 'BUY', 'fills': 
+[{'price': '2888.82000000', 'qty': '0.00510000', 
+'commission': '0.00002777', 'commissionAsset': 'BNB', 'tradeId': 266184356}]}
+
+
+
+
+
+  {'symbol': 'ETHUSDT', 'orderId': 7848161625, 'orderListId': -1, 'clientOrderId': 'v72bYrotvtxkic5V1LgnvH',
+   'transactTime': 1644865734686, 'price': '0.00000000', 'origQty': '0.00520000', 'executedQty': '0.00520000',
+    'cummulativeQuoteQty': '14.99368000', 'status': 'FILLED', 'timeInForce': 'GTC', 'type': 'MARKET', 'side': 'SELL', 
+  'fills': [{'price': '2883.40000000', 'qty': '0.00520000', 'commission': '0.00002826', 'commissionAsset': 'BNB', 'tradeId': 757775818}]}

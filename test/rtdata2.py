@@ -1,3 +1,8 @@
+#!/usr/bin/env python3.7
+# coding: utf-8
+"""
+try to get real time data seconds by seconds
+"""
 from binance import ThreadedWebsocketManager
 import time 
 symbol = 'BNBBTC'
