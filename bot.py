@@ -27,7 +27,7 @@ async def main():
     minimo_guadagno_percentuale = 0.09 # %[0,100]
     
     numero_massimo_ordini = 1
-    my_symbol = 'ETH'
+    my_symbol = 'BNB'
 
     BUY_open_orders = []
     SELL_open_orders = []
