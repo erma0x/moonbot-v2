@@ -24,7 +24,7 @@ async def main():
     investimento = 15 # $
     prezzo_di_apertura = 0 
     minimo_guadagno_assoluto = 1 # $
-    minimo_guadagno_percentuale = 0.08 # %[0,100]
+    minimo_guadagno_percentuale = 0.06 # %[0,100]
     
     numero_massimo_ordini = 1
     my_symbol = 'ETH'

@@ -15,7 +15,7 @@ async def get_data(client,token_pair='BNBUSDT'): ############### NON KLINE MA PR
     bm = BinanceSocketManager(client)
     async with bm.kline_socket(symbol=token_pair) as stream:        
         res = await stream.recv()
-        print(' token: ',token_pair,' price: ',res['k']['c'] ,' volume: ',res['k']['V'],'  date: ',timestamp_to_date(res['k']['T']))
+        #print(' token: ',token_pair,' price: ',res['k']['c'] ,' volume: ',res['k']['V'],'  date: ',timestamp_to_date(res['k']['T']))
         return( float( res['k']['c'] ) ) 
 
 def print_order(order_):
