@@ -57,7 +57,7 @@ async def main():
                     type=client.ORDER_TYPE_MARKET,
                     quantity = await format_coin_quantity(coin_quantity, symbol = my_symbol+buy_stablecoin))
 
-            print_order(order)
+            print_OPEN(order)
             BUY_open_orders.append(order)
 
 # SELL TOKEN 
@@ -79,6 +79,10 @@ async def main():
                         type=client.ORDER_TYPE_MARKET,
                         quantity=await format_coin_quantity(coin_quantity, symbol = my_symbol+sell_stablecoin))
 
+                    
+                    print_OPEN(order)
+                    print_FILLED(order)
+
                     SELL_open_orders.append(order)
                     #FILLED_orders.append(BUY_open_orders[i])
                     BUY_open_orders.remove(BUY_open_orders[i])
@@ -87,6 +91,7 @@ async def main():
             for i in range(len(SELL_open_orders)):
                 if SELL_open_orders[i]['status']=='FILLED':
                     #FILLED_orders.append(SELL_open_orders[i])
+                    print_FILLED(SELL_open_orders[i])
                     SELL_open_orders.remove(SELL_open_orders[i])
 
 if __name__ == "__main__":

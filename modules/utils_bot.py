@@ -36,29 +36,62 @@ async def get_data(client,token_pair='BNBUSDT'): ############### NON KLINE MA PR
         #print(' token: ',token_pair,' price: ',res['k']['c'] ,' volume: ',res['k']['V'],'  date: ',timestamp_to_date(res['k']['T']))
         return( float( res['k']['c'] ) ) 
 
-def print_order(order_):
+def print_OPEN(order_):
     text ="""
+_____________________________________________________________
+            APRE OPERAZIONE
+symbol \t\t      {0}
+price \t         {1}
+quantity\t       {2}
+side\t           {3}
+transaction time\t{4}
+order ID        \t{5} 
+client order ID \t{6}
+_____________________________________________________________
+    """.format(
+        order_['symbol'],
+        order_['price'],
+        order_['origQty'],
+        order_['side'],
+        timestamp_to_date(order_['transactTime']), 
+        order_['orderId'],
+        order_['clientOrderId'],
+    )
+    print(text)
 
-symbol \t\t       {1}
 
-OPEN PRICE \t {5}
-original quantity\t{4}
+def print_FILLED(order_):
+    text ="""
+__________________________________________________
+            OPERAZIONE CHIUSA  
 
-transaction time\t{2}
-
-order ID        \t{0} 
-client order ID \t{3}
-
-guadagno assoluto    stimato $ \t{6}
-guadagno percentuale stimato % \t{7}
-guadagno assoluto    effettivo $ \t{8}
-guadagno percentuale effettivo % \t{9}
-
-    """.format(order_['orderId'],
-    order_['symbol'],
-    order_['side'],
-    timestamp_to_date(order_['transactTime']),
-    order_['clientOrderId'],
-    order_['origQty'],
-    order_['price'])
+symbol \t\t      {0}
+price \t         {1}
+quantity\t       {2}
+commission\t     {3}
+side\t           {4}
+transaction time\t{5}
+executedQty\t {6}
+origQty\t {7}
+type\t {8}
+tradeId\t {9}
+status\t {10}
+order ID        \t{11} 
+client order ID \t{12}
+_____________________________________________________________
+    """.format(
+        order_['symbol'],
+        order_['fills'][0]['price'],
+        order_['fills'][0]['qty'],
+        order_['fills'][0]['commission'],
+        order_['side'],
+        timestamp_to_date(order_['transactTime']), 
+        order_['executedQty'],
+        order_['origQty'],
+        order_['type'],
+        order_['fills'][0]['tradeId'],
+        order_['status'],
+        order_['orderId'],
+        order_['clientOrderId'],
+    )
     print(text)
