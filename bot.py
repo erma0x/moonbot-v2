@@ -21,7 +21,7 @@ async def main():
     api_secret = os.environ.get('binance_secret')
     client = await AsyncClient.create(api_key, api_secret)
 
-    investimento = 15 # $
+    investimento = 40 # $
     prezzo_di_apertura = 0 
     minimo_guadagno_assoluto = 1 # $
     minimo_guadagno_percentuale = 0.09 # %[0,100]
