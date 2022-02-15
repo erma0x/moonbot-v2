@@ -88,8 +88,8 @@ async def main():
 
                     order = await client.order_limit_sell(timeInForce='GTC',
                                         symbol = sell_symbol,
-                                        quantity = await format_coin_quantity(coin_quantity),
-                                        price = round(float(max(sell_priceUSDT,sell_priceBUSD)),4)) # round 2, or 4
+                                        quantity = await format_coin_quantity(coin_quantity,symbol=sell_symbol),
+                                        price = round(float(max(sell_priceUSDT,sell_priceBUSD)),2)) # round 2, or 4
 
 
                     print_OPEN(order)
