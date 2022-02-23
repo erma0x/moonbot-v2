@@ -27,7 +27,7 @@ async def main():
     commissioniSpotMaker = 0.075 # %
     commissioniSpotTaker = 0.075 # %
 
-    investimento = 20 # $
+    investimento = 12 # $
     prezzo_di_apertura = 0 
     minimo_guadagno_assoluto = 1 # $
     minimo_guadagno_percentuale_buy = 0.09 # %[0,100]
@@ -92,7 +92,7 @@ async def main():
                     
                     sell_symbol = deepcopy(my_symbol+sell_stablecoin)
                     prezzo_minimo_vendita = max(priceUSDT,priceBUSD)
-                    prezzo_di_apertura = orderbookBUY['prezzo_di_apertura_buy']
+                    prezzo_di_apertura = orderbookBUY[i]['prezzo_di_apertura_buy']
                     
                                                                  # 20 =>        prezzo di SELL  >= 1.2 * prezzo di BUY
                     if prezzo_minimo_vendita >= (( (minimo_guadagno_percentuale_sell+commissioniSpotMaker)/100) + 1) * prezzo_di_apertura :
