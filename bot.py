@@ -27,10 +27,12 @@ async def main():
     commissioniSpotMaker = 0.075 # %
     commissioniSpotTaker = 0.075 # %
 
-    investimento = 12 # $
+    investimento = 12 # $                       # 0.0075
+    investimento_effettivo = investimento - (commissioniSpotMaker/100) * investimento
     prezzo_di_apertura = 0 
     minimo_guadagno_assoluto = 1 # $
-    minimo_guadagno_percentuale_buy = 0.09 # %[0,100]
+
+    minimo_guadagno_percentuale_buy = 0.09 # %[0,100] + commissioni = 0,165
     minimo_guadagno_percentuale_sell = 0.1 # %[0,100]
 
     numero_massimo_ordini = 1
@@ -47,9 +49,9 @@ async def main():
         print(my_symbol+'USDT ',priceUSDT,'\t|\t',my_symbol+'BUSD : ',priceBUSD)
         
         lower_price_stablecoin = min(priceUSDT,priceBUSD)
-        coin_quantity = investimento/lower_price_stablecoin
-        guadagno_assoluto_stimato = coin_quantity*max(priceUSDT,priceBUSD) - investimento
-        guadagno_percentuale_stimato = guadagno_assoluto_stimato/investimento*100
+        coin_quantity = investimento_effettivo/lower_price_stablecoin
+        guadagno_assoluto_stimato = coin_quantity*max(priceUSDT,priceBUSD) - investimento_effettivo
+        guadagno_percentuale_stimato = guadagno_assoluto_stimato/investimento_effettivo*100
         
         print('guadagno stimato: % ',guadagno_percentuale_stimato,': $ ',guadagno_assoluto_stimato)
 
@@ -94,13 +96,16 @@ async def main():
                     prezzo_minimo_vendita = max(priceUSDT,priceBUSD)
                     prezzo_di_apertura = orderbookBUY[i]['prezzo_di_apertura_buy']
                     
+                    print('per aprire operazione in SELL ',prezzo_minimo_vendita,' deve essere maggiore di ',(( (minimo_guadagno_percentuale_sell+commissioniSpotMaker)/100) + 1) * prezzo_di_apertura  )
                                                                  # 20 =>        prezzo di SELL  >= 1.2 * prezzo di BUY
-                    if prezzo_minimo_vendita >= (( (minimo_guadagno_percentuale_sell+commissioniSpotMaker)/100) + 1) * prezzo_di_apertura :
 
-                        order = await client.order_limit_sell(timeInForce='GTC',
-                                            symbol = sell_symbol,
-                                            quantity = await format_coin_quantity(coin_quantity,symbol=sell_symbol),
-                                            price = round(float(prezzo_minimo_vendita),2)) # round 2, or 4
+                                                    # 0.1                          + 0.075         => 0.175 %
+                    prezzo_sell_limit = (( (minimo_guadagno_percentuale_sell+commissioniSpotMaker)/100) + 1) * prezzo_di_apertura
+
+                    order = await client.order_limit_sell(timeInForce='GTC',
+                                        symbol = sell_symbol,
+                                        quantity = await format_coin_quantity(coin_quantity,symbol=sell_symbol),
+                                        price = round(float(prezzo_sell_limit),2)) # round 2, or 4
 
 
                     print_OPEN(order)
