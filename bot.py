@@ -110,9 +110,8 @@ async def main():
                                         quantity = await format_coin_quantity(coin_quantity,symbol=sell_symbol),
                                         price = round(float(prezzo_sell_limit),2)) # round 2, or 4
                     time.sleep(1)
-
                     print_OPEN(order)
-                    print_FILLED(order)
+                    #print_FILLED(order)
 
                     orderbookSELL.append(order)
                     #FILLED_orders.append(orderbookBUY[i])
