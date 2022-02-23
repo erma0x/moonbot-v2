@@ -5,14 +5,15 @@ in the shell
 export binance_api="your_api_key_here"
 export binance_secret="your_api_secret_here"
 """
-import imp
+import time
 import os
 import asyncio
-from binance.enums import *
-from binance import AsyncClient
 from copy import deepcopy
 from modules.utils_bot import *
 import time
+
+from binance.enums import *
+from binance import AsyncClient
 
 async def main():
     """
@@ -55,7 +56,9 @@ async def main():
         
         print('guadagno stimato: % ',guadagno_percentuale_stimato,': $ ',guadagno_assoluto_stimato)
 
-# BUY TOKEN  
+
+
+# BUY TOKEN
         if guadagno_percentuale_stimato+commissioniSpotMaker >= minimo_guadagno_percentuale_buy and numero_massimo_ordini>=len(orderbookBUY):
             if priceUSDT > priceBUSD:
                 buy_stablecoin='BUSD'
@@ -66,11 +69,11 @@ async def main():
             buy_symbol = my_symbol + buy_stablecoin
 
 
-            order = await client.order_limit_buy(timeInForce='GTC',
+            order = await client.order_limit_buy(timeInForce='IOC',
                                 symbol = buy_symbol,
                                 quantity = await format_coin_quantity(coin_quantity, symbol = buy_symbol),
                                 price = round(float(min(priceBUSD,priceUSDT)),2))
-
+            time.sleep(1)
 
             order['prezzo_di_apertura_buy'] = min(priceBUSD,priceUSDT)
             print_OPEN(order)
@@ -102,11 +105,11 @@ async def main():
                                                     # 0.1                          + 0.075         => 0.175 %
                     prezzo_sell_limit = (( (minimo_guadagno_percentuale_sell+commissioniSpotMaker)/100) + 1) * prezzo_di_apertura
 
-                    order = await client.order_limit_sell(timeInForce='GTC',
+                    order = await client.order_limit_sell(timeInForce='IOC',
                                         symbol = sell_symbol,
                                         quantity = await format_coin_quantity(coin_quantity,symbol=sell_symbol),
                                         price = round(float(prezzo_sell_limit),2)) # round 2, or 4
-
+                    time.sleep(1)
 
                     print_OPEN(order)
                     print_FILLED(order)
