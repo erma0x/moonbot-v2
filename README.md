@@ -1,5 +1,4 @@
-# Moonboot
-## let's arbitrage on Binance 🤖 
+# Moonboot : let's arbitrage on Binance 🤖 
 
 <br>
 
