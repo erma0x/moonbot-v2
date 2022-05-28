@@ -1,37 +1,36 @@
-# Moonboot: let's arbitrage on Binance 
+# Moonboot
+## let's arbitrage on Binance 🤖 
 
-## RUN
-```bash
-source venv/bin/activate
-export binance_api="your api key"
-export binance_secret="your api secret"
-python3 bot.py
-```
+<br>
 
-# COSTI
-swap 10 centesimi
+## How to run 
+1. ```source venv/bin/activate```
+2. ```export binance_api="your api key"```
+3. ```export binance_secret="your api secret"```
+4. ```python3 bot.py```
 
-### COPPIE USDT/BUSD 
+
+## How to install
+1. ```python3 -m venv venv```
+2. ```source venv/bin/activate```
+3. ```python3 -m pip install --upgrade pip```
+4. ```python3 -m pip install --upgrade python-binance```
+5. ```export binance_api="your api key"```
+5. ```export binance_secret="your api secret"```
+
+<br>
+
+## Trading costs
+swap : 10 cents $
+
+### Pairs with USDT/BUSD 
 - X/BUSD
 - X/usdt
 - BUSD/usdt
 
-### COPPIE BNB/BUSD
+###  Pairs with BNB/BUSD
 - X/BUSD
 - X/BNB
 - BUSD/BNB
-
-## ERRORI
-APIError(code=-1013): Filter failure: MIN_NOTIONAL
-
-## INSTALLAZIONE
-```bash
-python3 -m venv venv 
-source venv/bin/activate
-python3 -m pip install --upgrade pip 
-python3 -m pip install --upgrade python-binance
-export binance_api="your api key"
-export binance_secret="your api secret"
-```
 
 
