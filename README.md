@@ -1,6 +1,14 @@
 # Moonboot : let's arbitrage on Binance 🤖 
 
-<br>
+
+## Descrizione
+Robot di arbitraggio all'interno di Binance.com
+
+Prende i dati real time da Binance dei prezzi delle coppie che cerchi
+
+Setta la differenza minima di prezzo fra due coppie (e.g. X/BUSD e X/USDT)
+al fine di aprire un operazione BUY LIMIT su spot 
+e dopo che e' stata fillata vendere a mercato  
 
 ## How to run 
 1. ```source venv/bin/activate```
