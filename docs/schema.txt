@@ -1,0 +1,28 @@
+Schema della Strategia con esempi
+
+
+A)
+BTC – USDT = 100
+BTC – BUSD = 101
+
+
+B)
+se la differenza ci soddisfa
+buy limit BTC – USDT 
+
+se l’ordine non e’ stato fillato in 
+30 secondi cancella l’ordine e fanne partire un altro
+l’ordine e’ fillato? 
+NO → aspetta
+
+C)
+SI → sell limit BTC – BUSD 
+
+
+D)
+Compra USDT con BUSD una volta che  BUSD/ ( USDT+ BUSD) < 0.2
+
+
+
+SAFE
+btc candelone in negativo

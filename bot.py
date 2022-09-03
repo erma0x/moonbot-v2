@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.7
 # coding: utf-8
 """
+
 in the shell 
 export binance_api="your_api_key_here"
 export binance_secret="your_api_secret_here"
