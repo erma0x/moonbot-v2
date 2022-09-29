@@ -1,7 +1,8 @@
-# Moonboot : let's arbitrage on Binance 🤖 
+# Moonbot trading robot 🤖 
+### Market-neutral arbitrage in binance.com 
 
-## Description
-Arbitrage robots within Binance.com
+![](docs/moonbot.jpeg)
+
 
 ## Workflow
 1. Get real time data from Binance on the prices of the pairs you are looking for.
