@@ -28,15 +28,12 @@
 
 <br>
 
-## Trading costs
-swap : 10 cents $
-
-### Pairs with USDT/BUSD 
+### Trading pairs with USDT/BUSD 
 - X/BUSD
-- X/usdt
-- BUSD/usdt
+- X/USDT
+- BUSD/USDT
 
-###  Pairs with BNB/BUSD
+### Trading pairs with BNB/BUSD
 - X/BUSD
 - X/BNB
 - BUSD/BNB
