@@ -11,6 +11,8 @@
 
 3. after the transaction has been filled, he sells spots to market in the other pair
 
+![](docs/TriangularArbitrage.png)
+
 ## How to run 
 1. ```source venv/bin/activate```
 2. ```export binance_api="your api key"```
