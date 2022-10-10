@@ -1,7 +1,14 @@
 # Moonbot trading robot 🤖 
-### Market-neutral arbitrage in binance.com 
+### Triangular arbitrage in binance.com 
 
 ![](docs/moonbot.jpeg)
+
+### Triangular arbitrage
+
+Triangular arbitrage is different from Spatial and proceeds on a single exchange. It does not rely on the asset’s price differences between trading platforms. Rather focuses on exploiting the price differences between trading pairs.
+As the name conveys, triangular arbitrage involves three different assets, in our case, cryptocurrencies listed on the same exchange. The strategy is based on trading asset A for asset B, asset B for asset C, and finally asset C back to asset A to earn a profit.
+Opportunities for triangular crypto arbitrage arise from price differences between three (or more) cryptocurrencies. Traders are looking for cases when a specific coin is undervalued compared to the other and overvalued compared to the third. They profit from the conversion differences.
+
 
 
 ## Workflow
